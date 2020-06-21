@@ -1,7 +1,7 @@
 # AVR Programmer Boards
 Collection of AVR Programmer Boards and Accessories
 
-# UPDI Programmer - ATmega8/88/168/329 (SMD)
+# UPDI Programmer - ATmega8/88/168/328 (SMD)
 UPDI programmer (jtag2updi) for the new tinyAVR 0- and 1-series microcontrollers based on ATmega8/88/168/328.
 
 Project Video: https://youtu.be/OVSLsA9-gF0
