@@ -5,8 +5,11 @@ Collection of AVR Programmer Boards and Accessories
 UPDI programmer (jtag2updi) for the new tinyAVR 0- and 1-series microcontrollers based on ATmega8/88/168/328.
 
 Project Video: https://youtu.be/OVSLsA9-gF0
+
 More information and firmware: https://github.com/ElTangas/jtag2updi
+
 Getting started with the new ATtiny chips: http://www.technoblogy.com/show?2OCH
+
 megaTinyCore: https://github.com/SpenceKonde/megaTinyCore
 
 ![IMG_20191208_124317_x.jpg](https://image.easyeda.com/pullimage/PM68XuK188ao1RtIswFbullYaIk90rYgmMzmChER.jpeg)
@@ -16,8 +19,11 @@ megaTinyCore: https://github.com/SpenceKonde/megaTinyCore
 Mini UPDI programmer (jtag2updi) for the new tinyAVR 0- and 1-series microcontrollers based on the ATtiny1604/1614. Program the new ATtiny devices with a new ATtiny device!
 
 How to use a UPDI programmer video: https://youtu.be/OVSLsA9-gF0
+
 More information and firmware: https://github.com/ElTangas/jtag2updi
+
 Getting started with the new ATtiny chips: http://www.technoblogy.com/show?2OCH
+
 megaTinyCore: https://github.com/SpenceKonde/megaTinyCore
 
 ![IMG_20200613_173825_x.jpg](https://image.easyeda.com/pullimage/icfYq77BBZRDNswbE3f3vRKpzrFgV8p63hpvzKs4.jpeg)
