@@ -1,0 +1,1 @@
+USB ISP programmer with buffer for Atmel AVR microcontrollers based on the design by ladyada. More information can be found at https://learn.adafruit.com/usbtinyisp. Windows users may need to install a driver: https://learn.adafruit.com/usbtinyisp/drivers. Of course this is not necessary for linux and mac users.
