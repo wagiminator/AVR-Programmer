@@ -1,0 +1,1 @@
+Simple USB ISP programmer for Atmel AVR microcontrollers based on the ATtiny45/85. More information can be found at https://dicks.home.xs4all.nl/avr/usbtiny/. Windows users may need to install a driver: https://learn.adafruit.com/usbtinyisp/drivers. Of course this is not necessary for linux and mac users.
