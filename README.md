@@ -29,6 +29,19 @@ megaTinyCore: https://github.com/SpenceKonde/megaTinyCore
 ![IMG_20200613_173825_x.jpg](https://image.easyeda.com/pullimage/icfYq77BBZRDNswbE3f3vRKpzrFgV8p63hpvzKs4.jpeg)
 ![IMG_20200613_173920_x.jpg](https://image.easyeda.com/pullimage/qU5N95pMje5yX9TScD6FCIrOMVn27a4kgl2rreWa.jpeg)
 
+# USBasp - ATmega8A (SMD)
+
+USBasp - USB ISP/TPI programmer stick for Atmel AVR microcontrollers with 5V and 3.3V target voltage based on the design by Thomas Fischl. More information can be found at https://www.fischl.de/usbasp/. Windows users may need to install a driver. Of course this is not necessary for linux and mac users.
+
+|Jumper|Function|
+|-|-|
+|TGTVCC|Close to power target device via ISP header|
+|SELFPRG|Close to upload firmware to USBasp itself via ISP header|
+|SLOWCLK|Close to upload firmware to target device with slow speed (necessary for factory-new microcontrollers)|
+
+![IMG_20200807_142132_x.jpg](https://image.easyeda.com/pullimage/d0ASArBzXZ8V1ynPEoLOtxn6s97VlMvqZNAw8k3H.jpeg)
+![IMG_20200807_142211_x.jpg](https://image.easyeda.com/pullimage/ZjNAFKYcdE5Z6Ej2qIZHsuxyc8uMiJBT51fkMTWi.jpeg)
+
 # USBtinyISP - ATtiny45/85 (SMD)
 Simple USB ISP programmer for Atmel AVR microcontrollers based on the ATtiny45/85. More information can be found at https://dicks.home.xs4all.nl/avr/usbtiny/. Windows users may need to install a driver: https://learn.adafruit.com/usbtinyisp/drivers. Of course this is not necessary for linux and mac users.
 
