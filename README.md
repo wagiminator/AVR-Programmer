@@ -36,7 +36,7 @@ HV UPDI (High Voltage Unified Program and Debug Interface) programmer for the ne
 **Mode Jumper Settings:**
 
 |Mode Jumper|Prog Mode|PA0 Configurations|HV Pulse|Power Cycle|
-|-|-|-|-|-|-|
+|-|-|-|-|-|
 |no jumper|UPDI|UPDI|NO|NO|
 |pins 2-3 shorted|HV|UPDI, RESET|YES|NO|
 |pins 1-2 shorted|PCHV|UPDI, RESET, GPIO|YES|YES|
