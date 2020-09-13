@@ -95,8 +95,8 @@ Mini HV UPDI (High Voltage Unified Program and Debug Interface) programmer for t
 |PRG|STEADY ON when in programming mode|
 |HV|FLASHING at HV pulses during programming|
 
-![IMG_20200913_102915_x.jpg](//image.easyeda.com/pullimage/WHLYr95X94WEz8xDnWDjL9huWchuZqdKR6tdkJLe.jpeg)
-![IMG_20200913_102947_x.jpg](//image.easyeda.com/pullimage/Y3l77uJMz41Lhfrs3PIsd4ozecEohC2g1A3MwJd7.jpeg)
+![IMG_20200913_102915_x.jpg](https://image.easyeda.com/pullimage/WHLYr95X94WEz8xDnWDjL9huWchuZqdKR6tdkJLe.jpeg)
+![IMG_20200913_102947_x.jpg](https://image.easyeda.com/pullimage/Y3l77uJMz41Lhfrs3PIsd4ozecEohC2g1A3MwJd7.jpeg)
 
 # USBasp - ATmega8A (SMD)
 
