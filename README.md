@@ -31,7 +31,7 @@ megaTinyCore: https://github.com/SpenceKonde/megaTinyCore
 
 # UPDI HV Programmer - ATmega8/88/168/328 (SMD)
 
-HV UPDI (High Voltage Unified Program and Debug Interface) programmer for the new tinyAVR 0- and 1-series microcontrollers built on ATmega8/88/168/328 based on the design and the firmware by Dlloydev (https://github.com/Dlloydev/jtag2updi). The HV UPDI programmer will enable you to use the additional configuration settings for the UPDI pin without the fear of getting locked out from the MCU. It features 3 programming modes: UPDI, HV or PCHV, with the target voltage at 5V.
+HV UPDI (High Voltage Unified Program and Debug Interface) programmer for the new megaAVR 0-, tinyAVR 0- and 1-series microcontrollers built on ATmega8/88/168/328 based on the design and the firmware by Dlloydev (https://github.com/Dlloydev/jtag2updi). The HV UPDI programmer will enable you to use the additional configuration settings for the UPDI pin without the fear of getting locked out from the MCU. It features 3 programming modes: UPDI, HV or PCHV, with the target voltage at 5V.
 
 **Mode Jumper Settings:**
 
@@ -61,7 +61,7 @@ HV UPDI (High Voltage Unified Program and Debug Interface) programmer for the ne
 
 # UPDI HV Programmer Mini - ATtiny1604/1614 (SMD)
 
-Mini HV UPDI (High Voltage Unified Program and Debug Interface) programmer for the new tinyAVR 0- and 1-series microcontrollers built on ATtiny1604/1614 based on the design and the firmware by Dlloydev (https://github.com/Dlloydev/jtag2updi). The Mini HV UPDI programmer will enable you to use the additional configuration settings for the UPDI pin without the fear of getting locked out from the MCU. It features 3 programming modes: UPDI, HV or PCHV, with the target voltage at 5V.
+Mini HV UPDI (High Voltage Unified Program and Debug Interface) programmer for the new megaAVR 0-, tinyAVR 0- and 1-series microcontrollers built on ATtiny1604/1614 based on the design and the firmware by Dlloydev (https://github.com/Dlloydev/jtag2updi). The Mini HV UPDI programmer will enable you to use the additional configuration settings for the UPDI pin without the fear of getting locked out from the MCU. It features 3 programming modes: UPDI, HV or PCHV, with the target voltage at 5V.
 
 **SELFPRG Jumper Settings:**
 
