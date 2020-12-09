@@ -2,12 +2,12 @@
 Collection of AVR Programmer Boards and Accessories
 
 ## [UPDI Programmer - ATmega8/88/168/328 (SMD)](https://github.com/wagiminator/AVR-Programmer/tree/master/UPDI_Programmer)
-UPDI Programmer (jtag2updi) for the new megaAVR 0-, tinyAVR 0- and 1-series microcontrollers built on ATmega8/88/168/328 based on the design and firmware by [ElTangas](https://github.com/ElTangas/jtag2updi).
+UPDI Programmer (jtag2updi) for the new AVR-DA-, AVR-DB-, megaAVR 0-, tinyAVR 0- and 1-series microcontrollers built on ATmega8/88/168/328 based on the design and firmware by [ElTangas](https://github.com/ElTangas/jtag2updi).
 
 ![IMG_20200514_173213_x.jpg](https://image.easyeda.com/pullimage/IGZjPZZ4m6kjn5Qch3MXRU1gqsGLIccMPUOz08z0.jpeg)
 
 ## [UPDI Programmer Mini - ATtiny1604/1614 (SMD)](https://github.com/wagiminator/AVR-Programmer/tree/master/UPDI_Programmer_Mini)
-Mini UPDI Programmer Stick (jtag2updi) for the new megaAVR 0-,tinyAVR 0- and 1-series microcontrollers built on ATtiny1604/1614 based on the design and firmware by [ElTangas](https://github.com/ElTangas/jtag2updi). Program the new ATtiny devices with a new ATtiny device!
+Mini UPDI Programmer Stick (jtag2updi) for the new AVR-DA-, AVR-DB-, megaAVR 0-,tinyAVR 0- and 1-series microcontrollers built on ATtiny1604/1614 based on the design and firmware by [ElTangas](https://github.com/ElTangas/jtag2updi). Program the new ATtiny devices with a new ATtiny device!
 
 ![IMG_20200613_173825_x.jpg](https://image.easyeda.com/pullimage/icfYq77BBZRDNswbE3f3vRKpzrFgV8p63hpvzKs4.jpeg)
 ![IMG_20200613_173920_x.jpg](https://image.easyeda.com/pullimage/qU5N95pMje5yX9TScD6FCIrOMVn27a4kgl2rreWa.jpeg)
