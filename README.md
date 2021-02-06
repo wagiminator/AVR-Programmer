@@ -69,3 +69,9 @@ AVR programmer adapter for 8-pin ATtiny microcontrollers for converting:
 
 ![IMG_20200614_132142_x.jpg](https://image.easyeda.com/pullimage/2Z1C33oQaDrrEAdvkacl5YyJtu6WFPP9fS3XFmv0.jpeg)
 ![IMG_20200614_132106_x.jpg](https://image.easyeda.com/pullimage/HYhXpGDUFOx7fKk47dkpx30zrmqlgDVB5G0cT1hW.jpeg)
+
+## [AVR Programmer Adapter Maxi](https://github.com/wagiminator/AVR-Programmer/tree/master/AVR_Programmer_Adapter_Maxi)
+The AVR Programmer Adapter Maxi makes it easy to program SMD ATtinys and ATmegas in SOIC-8, SOIC-14 and TQFP-32 packages.
+
+![pic1.jpg](https://image.easyeda.com/pullimage/kbvD8kJzoMA1VfWvLwGwmdJkS6xdLQlM6pdZamyE.jpeg)
+![pic2.jpg](https://image.easyeda.com/pullimage/Ap5RL7OdWHZ9hmI1lqf9LyamKWbGW0VlYceR2ZY2.jpeg)
