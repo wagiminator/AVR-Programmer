@@ -1,5 +1,5 @@
 # Mini UPDI Programmer Stick
-Mini UPDI programmer (jtag2updi) for the new AVR-DA-, AVR-DB-, megaAVR 0-, tinyAVR 0- and 1-series microcontrollers based on the ATtiny1604/1614. Program the new ATtiny devices with a new ATtiny device!
+Mini UPDI programmer (jtag2updi) for tinyAVR, megaAVR and AVR-Dx microcontrollers based on the ATtiny1604/1614. Program the new ATtiny devices with a new ATtiny device!
 
 - How to use a UPDI programmer video: https://youtu.be/OVSLsA9-gF0
 - More information and firmware: https://github.com/ElTangas/jtag2updi

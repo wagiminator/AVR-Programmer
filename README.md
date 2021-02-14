@@ -2,28 +2,28 @@
 Collection of AVR Programmer Boards and Accessories
 
 ## [PyUPDI Programmer - CH330N (SMD)](https://github.com/wagiminator/AVR-Programmer/tree/master/PyUPDI_Programmer)
-Probably the simplest UPDI programmer for tinyAVR and megaAVR microcontrollers. The programmer works with [pyupdi](https://github.com/mraardvark/pyupdi) as well as with the Arduino IDE as ["Serial Port and 4.7k (pyupdi style)"](https://github.com/SpenceKonde/megaTinyCore). It is based on the USB-to-serial chip [CH330N](https://datasheet.lcsc.com/szlcsc/2008191734_WCH-Jiangsu-Qin-Heng-CH330N_C108996.pdf).
+Probably the simplest UPDI programmer for tinyAVR, megaAVR and AVR-Dx microcontrollers. The programmer works with [pyupdi](https://github.com/mraardvark/pyupdi) as well as with the Arduino IDE as ["Serial Port and 4.7k (pyupdi style)"](https://github.com/SpenceKonde/megaTinyCore). It is based on the USB-to-serial chip [CH330N](https://datasheet.lcsc.com/szlcsc/2008191734_WCH-Jiangsu-Qin-Heng-CH330N_C108996.pdf).
 
 ![pyupdi.jpeg](https://image.easyeda.com/pullimage/cmFBJ43XwqnE9A9QaQ3ZlOgXACQCEkHkLUZ4x8K1.jpeg)
 
 ## [UPDI Programmer - ATmega8/88/168/328 (SMD)](https://github.com/wagiminator/AVR-Programmer/tree/master/UPDI_Programmer)
-UPDI Programmer (jtag2updi) for the new AVR-DA-, AVR-DB-, megaAVR 0-, tinyAVR 0- and 1-series microcontrollers built on ATmega8/88/168/328 based on the design and firmware by [ElTangas](https://github.com/ElTangas/jtag2updi).
+UPDI Programmer (jtag2updi) for tinyAVR, megaAVR and AVR-Dx microcontrollers built on ATmega8/88/168/328 based on the design and firmware by [ElTangas](https://github.com/ElTangas/jtag2updi).
 
 ![IMG_20200514_173213_x.jpg](https://image.easyeda.com/pullimage/IGZjPZZ4m6kjn5Qch3MXRU1gqsGLIccMPUOz08z0.jpeg)
 
 ## [UPDI Programmer Mini - ATtiny1604/1614 (SMD)](https://github.com/wagiminator/AVR-Programmer/tree/master/UPDI_Programmer_Mini)
-Mini UPDI Programmer Stick (jtag2updi) for the new AVR-DA-, AVR-DB-, megaAVR 0-,tinyAVR 0- and 1-series microcontrollers built on ATtiny1604/1614 based on the design and firmware by [ElTangas](https://github.com/ElTangas/jtag2updi). Program the new ATtiny devices with a new ATtiny device!
+Mini UPDI Programmer Stick (jtag2updi) for tinyAVR, megaAVR and AVR-Dx microcontrollers built on ATtiny1604/1614 based on the design and firmware by [ElTangas](https://github.com/ElTangas/jtag2updi). Program the new ATtiny devices with a new ATtiny device!
 
 ![IMG_20200613_173825_x.jpg](https://image.easyeda.com/pullimage/icfYq77BBZRDNswbE3f3vRKpzrFgV8p63hpvzKs4.jpeg)
 ![IMG_20200613_173920_x.jpg](https://image.easyeda.com/pullimage/qU5N95pMje5yX9TScD6FCIrOMVn27a4kgl2rreWa.jpeg)
 
 ## [UPDI HV Programmer - ATmega8/88/168/328 (SMD)](https://github.com/wagiminator/AVR-Programmer/tree/master/UPDI_HV_Programmer)
-HV UPDI (High Voltage Unified Program and Debug Interface) Programmer for the new megaAVR 0-, tinyAVR 0- and 1-series microcontrollers built on ATmega8/88/168/328 based on the design and the firmware by [Dlloydev](https://github.com/Dlloydev/jtag2updi). The HV UPDI Programmer will enable you to use the additional configuration settings for the UPDI pin without the fear of getting locked out from the MCU. It features 3 programming modes: UPDI, HV or PCHV, with the target voltage at 5V.
+HV UPDI (High-Voltage Unified Program and Debug Interface) Programmer for tinyAVR, megaAVR and AVR-Dx microcontrollers built on ATmega8/88/168/328 based on the design and the firmware by [Dlloydev](https://github.com/Dlloydev/jtag2updi). The HV UPDI Programmer will enable you to use the additional configuration settings for the UPDI pin without the fear of getting locked out from the MCU. It features 3 programming modes: UPDI, HV or PCHV, with the target voltage at 5V.
 
 ![IMG_20200816_165418_x.jpg](https://image.easyeda.com/pullimage/WSaYBqbKyEx85czv25Vj6bLIZKI5R4EZFXKvWk67.jpeg)
 
 ## [UPDI HV Programmer Mini - ATtiny1604/1614 (SMD)](https://github.com/wagiminator/AVR-Programmer/tree/master/UPDI_HV_Programmer_Mini)
-Mini HV UPDI (High Voltage Unified Program and Debug Interface) Programmer Stick for the new megaAVR 0-, tinyAVR 0- and 1-series microcontrollers built on ATtiny1604/1614 based on the design and the firmware by [Dlloydev](https://github.com/Dlloydev/jtag2updi). The Mini HV UPDI Programmer Stick will enable you to use the additional configuration settings for the UPDI pin without the fear of getting locked out from the MCU. It features 3 programming modes: UPDI, HV or PCHV, with the target voltage at 5V.
+Mini HV UPDI (High-Voltage Unified Program and Debug Interface) Programmer Stick for tinyAVR, megaAVR and AVR-Dx microcontrollers built on ATtiny1604/1614 based on the design and the firmware by [Dlloydev](https://github.com/Dlloydev/jtag2updi). The Mini HV UPDI Programmer Stick will enable you to use the additional configuration settings for the UPDI pin without the fear of getting locked out from the MCU. It features 3 programming modes: UPDI, HV or PCHV, with the target voltage at 5V.
 
 ![IMG_20200913_102915_x.jpg](https://image.easyeda.com/pullimage/WHLYr95X94WEz8xDnWDjL9huWchuZqdKR6tdkJLe.jpeg)
 ![IMG_20200913_102947_x.jpg](https://image.easyeda.com/pullimage/Y3l77uJMz41Lhfrs3PIsd4ozecEohC2g1A3MwJd7.jpeg)

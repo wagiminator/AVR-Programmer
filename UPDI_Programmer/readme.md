@@ -1,5 +1,5 @@
 # UPDI Programmer (jtag2updi)
-UPDI programmer (jtag2updi) for the new AVR-DA-, AVR-DB-, megaAVR 0-, tinyAVR 0- and 1-series microcontrollers based on ATmega8/88/168/328.
+UPDI programmer (jtag2updi) for tinyAVR, megaAVR and AVR-Dx microcontrollers based on ATmega8/88/168/328.
 
 - Project Video: https://youtu.be/OVSLsA9-gF0
 - More information and firmware: https://github.com/ElTangas/jtag2updi
