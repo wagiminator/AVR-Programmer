@@ -29,6 +29,7 @@ HV UPDI (High-Voltage Unified Program and Debug Interface) programmer for tinyAV
 ![IMG_20200820_165012_x.jpg](https://image.easyeda.com/pullimage/MiPS7JxxDo3wv8L5noEuWbKuNfCzOo8h9CAsPrfS.jpeg)
 ![pic_17_2.jpg](https://image.easyeda.com/pullimage/looVl4c4DJbB6DBh1GLoLdgY8OiKGK0J3UIYaWCC.jpeg)
 
+- The CH330N can be replaced with a CH340N.
 - More information and source code: https://github.com/Dlloydev/jtag2updi
 - Getting started with the new ATtiny chips: http://www.technoblogy.com/show?2OCH
 - megaTinyCore: https://github.com/SpenceKonde/megaTinyCore

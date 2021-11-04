@@ -41,6 +41,7 @@ Mini HV UPDI (High-Voltage Unified Program and Debug Interface) programmer for t
 |HV|FLASHING at HV pulses during programming|
 
 # Further Information
+- The CH330N can be replaced with a CH340N.
 - More information and source code: https://github.com/Dlloydev/jtag2updi/wiki/DIY-ATtiny-HV-UPDI-Programmer
 - Getting started with the new ATtiny chips: http://www.technoblogy.com/show?2OCH
 - megaTinyCore: https://github.com/SpenceKonde/megaTinyCore
