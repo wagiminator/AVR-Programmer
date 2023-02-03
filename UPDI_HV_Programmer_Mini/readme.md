@@ -1,8 +1,7 @@
 # Mini UPDI HV Programmer Stick
 Mini HV UPDI (High-Voltage Unified Program and Debug Interface) programmer for tinyAVR, megaAVR and AVR-Dx microcontrollers built on ATtiny1604/1614 based on the design and the firmware by Dlloydev (https://github.com/Dlloydev/jtag2updi). The Mini HV UPDI programmer will enable you to use the additional configuration settings for the UPDI pin without the fear of getting locked out from the MCU. It features 3 programming modes: UPDI, HV or PCHV, with the target voltage at 5V.
 
-![IMG_20200913_102915_x.jpg](https://image.easyeda.com/pullimage/WHLYr95X94WEz8xDnWDjL9huWchuZqdKR6tdkJLe.jpeg)
-![IMG_20200913_102947_x.jpg](https://image.easyeda.com/pullimage/Y3l77uJMz41Lhfrs3PIsd4ozecEohC2g1A3MwJd7.jpeg)
+![UPDI_HV_Programmer_Mini_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/UPDI_HV_Programmer_Mini/UPDI_HV_Programmer_Mini_pic1.jpg)
 
 # Uploading Firmware
 
@@ -43,11 +42,6 @@ Mini HV UPDI (High-Voltage Unified Program and Debug Interface) programmer for t
 # Further Information
 - The CH330N can be replaced with a CH340N.
 - More information and source code: https://github.com/Dlloydev/jtag2updi/wiki/DIY-ATtiny-HV-UPDI-Programmer
-- Getting started with the new ATtiny chips: http://www.technoblogy.com/show?2OCH
-- megaTinyCore: https://github.com/SpenceKonde/megaTinyCore
-- MegaCoreX: https://github.com/MCUdude/MegaCoreX
-- UPDI Programmer based on ATmega8/88/168/328: https://easyeda.com/wagiminator/y-updi-programmer
-- Mini UPDI Programmer based on ATtiny1604: https://easyeda.com/wagiminator/attiny1604-updi-programmer
-- Development board for ATtiny x14/x04 series: https://easyeda.com/wagiminator/attiny-814-development-board-smd
-- Development board for ATtiny x16/x06 series: https://easyeda.com/wagiminator/y-attiny3216-development-board-smd
-- Development board for ATmega4808 series: https://easyeda.com/wagiminator/atmega4808-development-board_copy
+
+![UPDI_HV_Programmer_Mini_pic2.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/UPDI_HV_Programmer_Mini/UPDI_HV_Programmer_Mini_pic2.jpg)
+![UPDI_HV_Programmer_Mini_pic3.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/UPDI_HV_Programmer_Mini/UPDI_HV_Programmer_Mini_pic3.jpg)

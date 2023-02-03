@@ -1,5 +1,7 @@
 # USBasp (ATmega8 SMD)
-USBasp - USB ISP/TPI programmer stick for Atmel AVR microcontrollers with 5V and 3.3V target voltage based on the design by Thomas Fischl. More information can be found at https://www.fischl.de/usbasp/. Windows users may need to install a driver. Of course this is not necessary for linux and mac users. Close SELFPROG and TGTPWR jumper when uploading firmware. If you are burning a fresh microcontroller, close the Slow Serial Clock jumper (SLOWCLK) since they are factory programmed for internal 1MHz oscillator. This is not necessary if the improved firmware by nerdralph (https://github.com/nerdralph/usbasp) is used. Close Taget Power jumper (TGTPWR) to power target device from the USBasp.
+The USBasp is a versatile USB ISP/TPI programmer stick designed for Atmel AVR microcontrollers with selectable target voltage of 5V and 3.3V. It is based on the design by Thomas Fischl and is an easy-to-use tool that enables you to program your microcontroller projects with ease. You can find more information about the USBasp at https://www.fischl.de/usbasp/. Windows users may need to install a driver in order to use the USBasp, however, linux and mac users can use it without any additional setup.
+
+If you are flashing a fresh microcontroller, it is important to close the Slow Serial Clock jumper (SLOWCLK) as these microcontrollers are factory programmed for an internal 1MHz oscillator. However, if you use the improved firmware by nerdralph (https://github.com/nerdralph/usbasp), this step is not necessary. To power your target device from the USBasp, simply close the Target Power jumper (TGTPWR). When uploading firmware to the USBasp itself, it is necessary to close the SELFPROG and TGTPWR jumpers.
 
 |Jumper|Function|
 |:-|:-|
@@ -7,7 +9,6 @@ USBasp - USB ISP/TPI programmer stick for Atmel AVR microcontrollers with 5V and
 |SELFPRG|Close to upload firmware to USBasp itself via ISP header|
 |SLOWCLK|Close to upload firmware to target device with slow speed (necessary for factory-new microcontrollers); not needed with improved firmware|
 
-![IMG_20200807_142132_x.jpg](https://image.easyeda.com/pullimage/d0ASArBzXZ8V1ynPEoLOtxn6s97VlMvqZNAw8k3H.jpeg)
-![IMG_20200807_142211_x.jpg](https://image.easyeda.com/pullimage/ZjNAFKYcdE5Z6Ej2qIZHsuxyc8uMiJBT51fkMTWi.jpeg)
-![IMG_20200816_174830_x.jpg](https://image.easyeda.com/pullimage/pyJKmLEWedlSWbKNEYuSy8WLDzoAjaKMpxDlgVo6.jpeg)
-![IMG_20200816_174955_x.jpg](https://image.easyeda.com/pullimage/KW5XFAbr3ytDBeJn8dDKWLITnnYtqpTK6Ppw7nry.jpeg)
+![USBasp_SMD_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/USBasp_SMD/USBasp_SMD_pic1.jpg)
+![USBasp_SMD_pic2.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/USBasp_SMD/USBasp_SMD_pic2.jpg)
+![USBasp_SMD_pic3.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/USBasp_SMD/USBasp_SMD_pic3.jpg)

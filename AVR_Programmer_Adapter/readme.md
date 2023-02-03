@@ -6,6 +6,6 @@ AVR programmer adapter for 8-pin ATtiny microcontrollers for converting:
 - 8-pin SOP8/SOIC8 clips,
 - 8-pin DIP8 chips.
 
-
-![IMG_20200614_132142_x.jpg](https://image.easyeda.com/pullimage/2Z1C33oQaDrrEAdvkacl5YyJtu6WFPP9fS3XFmv0.jpeg)
-![IMG_20200614_132106_x.jpg](https://image.easyeda.com/pullimage/HYhXpGDUFOx7fKk47dkpx30zrmqlgDVB5G0cT1hW.jpeg)
+![AVR_Programmer_Adapter_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/AVR_Programmer_Adapter/AVR_Programmer_Adapter_pic1.jpg)
+![AVR_Programmer_Adapter_pic2.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/AVR_Programmer_Adapter/AVR_Programmer_Adapter_pic2.jpg)
+![AVR_Programmer_Adapter_pic3.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/AVR_Programmer_Adapter/AVR_Programmer_Adapter_pic3.jpg)

@@ -1,5 +1,13 @@
 # USBasp (ATmega8 DIP) 
-USBasp - USB ISP/TPI programmer for Atmel AVR microcontrollers based on the design by Thomas Fischl. More information can be found at https://www.fischl.de/usbasp/. Windows users may need to install a driver. Of course this is not necessary for linux and mac users. Close SELFPROG and TGTPWR jumper when uploading firmware. If you are burning a fresh microcontroller, close the Slow Serial Clock jumper (SLOWCLK) since they are factory programmed for internal 1MHz oscillator. This is not necessary if the improved firmware by nerdralph (https://github.com/nerdralph/usbasp) is used. Close Taget Power jumper (TGTPWR) to power target device from the USBasp.
+The USBasp is a versatile USB ISP/TPI programmer stick designed for Atmel AVR microcontrollers with selectable target voltage of 5V and 3.3V. It is based on the design by Thomas Fischl and is an easy-to-use tool that enables you to program your microcontroller projects with ease. You can find more information about the USBasp at https://www.fischl.de/usbasp/. Windows users may need to install a driver in order to use the USBasp, however, linux and mac users can use it without any additional setup.
 
-![IMG_20200111_160216_x.jpg](https://image.easyeda.com/pullimage/7mTvpuRMFyOUBHyYD23iyDAu5gH15Dn6gT4HioRq.jpeg)
-![IMG_20200802_171824_x.jpg](https://image.easyeda.com/pullimage/366NwOCkSOOd821Kcmq0IatIjqJkbxV2InShmAvD.jpeg)
+If you are flashing a fresh microcontroller, it is important to close the Slow Serial Clock jumper (SLOWCLK) as these microcontrollers are factory programmed for an internal 1MHz oscillator. However, if you use the improved firmware by nerdralph (https://github.com/nerdralph/usbasp), this step is not necessary. To power your target device from the USBasp, simply close the Target Power jumper (TGTPWR). When uploading firmware to the USBasp itself, it is necessary to close the SELFPROG and TGTPWR jumpers.
+
+|Jumper|Function|
+|:-|:-|
+|TGTVCC|Close to power target device via ISP header|
+|SELFPRG|Close to upload firmware to USBasp itself via ISP header|
+|SLOWCLK|Close to upload firmware to target device with slow speed (necessary for factory-new microcontrollers); not needed with improved firmware|
+
+![USBasp_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/USBasp_DIP/USBasp_pic1.jpg)
+![USBasp_pic2.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/USBasp_DIP/USBasp_pic2.jpg)
