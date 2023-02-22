@@ -11,7 +11,7 @@ Simple and cheap UPDI programmer for tinyAVR, megaAVR and AVR-Dx microcontroller
 ![SerialUPDI_Programmer_pic3.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/SerialUPDI_Programmer/SerialUPDI_Programmer_pic3.jpg)
 
 ## [SerialUPDI HV Programmer - CH340E](https://github.com/wagiminator/AVR-Programmer/tree/master/SerialUPDI_HV_Programmer)
-The simple and cheap High-Voltage Serial UPDI Programmer is a device designed specifically for tinyAVR microcontrollers. This programmer includes a target voltage selection switch that allows users to choose between 5V and 3.3V for their project needs. With this device, you can use the additional configuration settings for the UPDI pin without worrying about getting locked out from the MCU. The programmer operates similarly to a standard SerialUPDI programmer and is compatible with popular development environments like the Arduino IDE, where it appears as "SerialUPDI". The device utilizes the MT3608 Boost Converter IC which generates the 12V pulse required for high-voltage activation of the UPDI pin.
+The simple and cheap High-Voltage Serial UPDI Programmer is a device designed specifically for tinyAVR microcontrollers. This programmer includes a target voltage selection switch that allows users to choose between 5V and 3.3V for their project needs. With this device, you can use the additional configuration settings for the UPDI pin without worrying about getting locked out from the MCU. The device utilizes the MT3608 Boost Converter IC which generates the 12V pulse required for high-voltage activation of the UPDI pin. The programmer operates similarly to a standard SerialUPDI programmer and is compatible with popular development environments like the Arduino IDE, where it appears as "SerialUPDI".
 
 ![SerialUPDI_HV_Prog_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/SerialUPDI_HV_Programmer/documentation/SerialUPDI_HV_Prog_pic1.jpg)
 
@@ -49,11 +49,6 @@ USB ISP Programmer with buffer for Atmel AVR microcontrollers based on the desig
 Simple USB ISP Programmer for Atmel AVR microcontrollers. More information can be found at https://dicks.home.xs4all.nl/avr/usbtiny/.
 
 ![USBtinyISP_t45_DIP_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/USBtinyISP_ATtiny45_DIP/USBtinyISP_t45_DIP_pic1.jpg)
-
-## [USB to Serial Converter - CH330N](https://github.com/wagiminator/AVR-Programmer/tree/master/USB_to_Serial_Converter)
-USB to serial converter based on the CH330N (or CH340N) chip with 5V or 3.3V logic.
-
-![USB_to_Serial_Converter_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/USB_to_Serial_Converter/USB_to_Serial_Converter_pic1.jpg)
 
 ## [AVR Programmer Adapter](https://github.com/wagiminator/AVR-Programmer/tree/master/AVR_Programmer_Adapter)
 AVR programmer adapter for 8-pin ATtiny microcontrollers for converting:
@@ -98,3 +93,8 @@ Mini HV UPDI (High-Voltage Unified Program and Debug Interface) Programmer Stick
 
 ![UPDI_HV_Programmer_Mini_pic2.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/UPDI_HV_Programmer_Mini/UPDI_HV_Programmer_Mini_pic2.jpg)
 ![UPDI_HV_Programmer_Mini_pic3.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/UPDI_HV_Programmer_Mini/UPDI_HV_Programmer_Mini_pic3.jpg)
+
+## [USB to Serial Converter - CH330N](https://github.com/wagiminator/AVR-Programmer/tree/master/USB_to_Serial_Converter)
+USB to serial converter based on the CH330N (or CH340N) chip with 5V or 3.3V logic.
+
+![USB_to_Serial_Converter_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/USB_to_Serial_Converter/USB_to_Serial_Converter_pic1.jpg)
