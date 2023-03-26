@@ -298,7 +298,6 @@ void ISP_EP0_OUT(void) {
   uint8_t i, r;
   uint8_t returnLen;
   uint16_t usec;
-  uint32_t baud;
   if(USB_MSG_flags & USB_FLG_USE_USER_RW) {
     switch(SetupReq) {
       case USBTINY_FLASH_WRITE:

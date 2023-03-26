@@ -42,6 +42,7 @@ typedef struct _USB_CFG_DESCR_ISP {
   USB_CFG_DESCR config;
   USB_ITF_DESCR interface0;
   USB_ENDP_DESCR ep1IN;
+  USB_IAD_DESCR association;
   USB_ITF_DESCR interface1;
   uint8_t functional[19];
   USB_ENDP_DESCR ep2IN;
