@@ -1,5 +1,5 @@
 // ===================================================================================
-// USBtinyISP and SerialUPDI Functions for CH551, CH552 and CH554             * v1.0 *
+// USBtinyISP and SerialUPDI Functions for CH551, CH552 and CH554             * v1.1 *
 // ===================================================================================
 
 #pragma once
@@ -23,6 +23,8 @@
 #define USBTINY_FLASH_WRITE     10    // write flash (wIndex:address, wValue:timeout)
 #define USBTINY_EEPROM_READ     11    // read eeprom (wIndex:address)
 #define USBTINY_EEPROM_WRITE    12    // write eeprom (wIndex:address, wValue:timeout)
+#define USBTINY_DDRWRITE        13  // set port direction
+#define USBTINY_SPI1            14  // send single byte via SPI
 
 // CDC class requests
 #define SET_LINE_CODING         0x20  // host configures line coding

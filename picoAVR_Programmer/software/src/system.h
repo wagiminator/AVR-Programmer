@@ -1,10 +1,10 @@
 // ===================================================================================
-// Basic System Functions for CH551, CH552 and CH554                          * v1.2 *
+// Basic System Functions for CH551, CH552 and CH554                          * v1.3 *
 // ===================================================================================
 //
 // Functions available:
 // --------------------
-// CLK_config()             set system clock frequency according to FREQ_SYS
+// CLK_config()             set system clock frequency according to F_CPU
 // CLK_external()           set external crystal as clock source
 // CLK_internal()           set internal oscillator as clock source
 //
@@ -71,30 +71,30 @@ inline void CLK_config(void) {
   SAFE_MOD = 0x55;
   SAFE_MOD = 0xAA;                              // enter safe mode
   
-  #if FREQ_SYS == 32000000
+  #if F_CPU == 32000000
     __asm__("orl _CLOCK_CFG, #0b00000111");     // 32MHz
-  #elif FREQ_SYS == 24000000
+  #elif F_CPU == 24000000
     __asm__("anl _CLOCK_CFG, #0b11111000");
     __asm__("orl _CLOCK_CFG, #0b00000110");     // 24MHz	
-  #elif FREQ_SYS == 16000000
+  #elif F_CPU == 16000000
     __asm__("anl _CLOCK_CFG, #0b11111000");
     __asm__("orl _CLOCK_CFG, #0b00000101");     // 16MHz	
-  #elif FREQ_SYS == 12000000
+  #elif F_CPU == 12000000
     __asm__("anl _CLOCK_CFG, #0b11111000");
     __asm__("orl _CLOCK_CFG, #0b00000100");     // 12MHz
-  #elif FREQ_SYS == 6000000
+  #elif F_CPU == 6000000
     __asm__("anl _CLOCK_CFG, #0b11111000");
     __asm__("orl _CLOCK_CFG, #0b00000011");     // 6MHz	
-  #elif FREQ_SYS == 3000000
+  #elif F_CPU == 3000000
     __asm__("anl _CLOCK_CFG, #0b11111000");
     __asm__("orl _CLOCK_CFG, #0b00000010");     // 3MHz	
-  #elif FREQ_SYS == 750000
+  #elif F_CPU == 750000
     __asm__("anl _CLOCK_CFG, #0b11111000");
     __asm__("orl _CLOCK_CFG, #0b00000001");     // 750kHz	
-  #elif FREQ_SYS == 187500
+  #elif F_CPU == 187500
     __asm__("anl _CLOCK_CFG, #0b11111000");     // 187.5kHz		
   #else
-    #warning FREQ_SYS invalid or not set
+    #warning F_CPU invalid or not set
   #endif
 
   SAFE_MOD = 0x00;                              // terminate safe mode
@@ -121,7 +121,7 @@ inline void CLK_inernal(void) {
 // ===================================================================================
 #define WDT_reset()       WDOG_COUNT = 0
 #define WDT_feed(value)   WDOG_COUNT = value
-#define WDT_set(time)     WDOG_COUNT = (uint8_t)(256 - ((FREQ_SYS / 1000) * time / 65536))
+#define WDT_set(time)     WDOG_COUNT = (uint8_t)(256 - ((F_CPU / 1000) * time / 65536))
 
 inline void WDT_start(void) {
   WDOG_COUNT  = 0;

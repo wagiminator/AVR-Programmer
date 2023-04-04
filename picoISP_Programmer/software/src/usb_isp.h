@@ -22,6 +22,8 @@
 #define USBTINY_FLASH_WRITE   10  // write flash (wIndex:address, wValue:timeout)
 #define USBTINY_EEPROM_READ   11  // read eeprom (wIndex:address)
 #define USBTINY_EEPROM_WRITE  12  // write eeprom (wIndex:address, wValue:timeout)
+#define USBTINY_DDRWRITE      13  // set port direction
+#define USBTINY_SPI1          14  // send single byte via SPI
 
 // USB message flags
 #define USB_FLG_USE_USER_RW   1

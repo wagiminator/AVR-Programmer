@@ -1,6 +1,6 @@
 // ===================================================================================
 // Project:   picoAVR ISP + UPDI Programmer based on CH551, CH552, CH554
-// Version:   v1.0
+// Version:   v1.1
 // Year:      2023
 // Author:    Stefan Wagner
 // Github:    https://github.com/wagiminator
@@ -27,13 +27,15 @@
 //
 // Compilation Instructions:
 // -------------------------
-// - Chip:     CH551, CH552 or CH554
-// - Clock:    16 MHz internal
-// - Adjust the firmware parameters in include/config.h if necessary.
+// - Chip:  CH551, CH552 or CH554
+// - Clock: 16 MHz internal
+// - Adjust the firmware parameters in src/config.h if necessary.
 // - Make sure SDCC toolchain and Python3 with PyUSB is installed.
 // - Press BOOT button on the board and keep it pressed while connecting it via USB
 //   with your PC.
-// - Run 'make flash'.
+// - Run 'make flash' immediatly afterwards.
+// - To compile the firmware using the Arduino IDE, follow the instructions in the 
+//   .ino file.
 //
 // Operating Instructions:
 // -----------------------
@@ -52,9 +54,9 @@
 // ===================================================================================
 
 // Libraries
-#include <system.h>                         // system functions
-#include <delay.h>                          // delay functions
-#include <usb_avr.h>                        // AVR ISP and UPDI functions
+#include "src/system.h"                     // system functions
+#include "src/delay.h"                      // delay functions
+#include "src/usb_avr.h"                    // AVR ISP and UPDI functions
 
 // Prototypes for used interrupts
 void USB_interrupt(void);
@@ -71,7 +73,7 @@ void main(void) {
 
   // Setup
   CLK_config();                             // configure system clock
-  DLY_ms(5);                                // wait for clock to settle
+  DLY_ms(10);                               // wait for clock to settle
   AVR_init();                               // init AVR ISP and UPDI
   WDT_start();                              // start watchdog
 

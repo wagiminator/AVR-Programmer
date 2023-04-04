@@ -1,5 +1,5 @@
 // ===================================================================================
-// Basic GPIO, PWM and ADC Functions for CH551, CH552 and CH554               * v1.3 *
+// Basic GPIO, PWM and ADC Functions for CH551, CH552 and CH554               * v1.4 *
 // ===================================================================================
 //
 // Pins must be defined as P10, P11, P12, etc. - e.g.:
@@ -227,12 +227,12 @@ SBIT(PP37, 0xB0, 7);
 (0)))))
 
 // ===================================================================================
-// Set global PWM frequency (in Hertz, range: FREQ_SYS/65536 - FREQ_SYS/256)
+// Set global PWM frequency (in Hertz, range: F_CPU/65536 - F_CPU/256)
 // ===================================================================================
 #define PWM_set_freq(FREQ) \
-  (((FREQ) >= FREQ_SYS / 256) ? (PWM_CK_SE = 0)              : \
-  (((FREQ_SYS / 256 / (FREQ) - 1) > 255) ? (PWM_CK_SE = 255) : \
-  (PWM_CK_SE = (uint8_t)(FREQ_SYS / 256 / (FREQ) - 1))         \
+  (((FREQ) >= F_CPU / 256) ? (PWM_CK_SE = 0)              : \
+  (((F_CPU / 256 / (FREQ) - 1) > 255) ? (PWM_CK_SE = 255) : \
+  (PWM_CK_SE = (uint8_t)(F_CPU / 256 / (FREQ) - 1))         \
 ))
 
 // ===================================================================================

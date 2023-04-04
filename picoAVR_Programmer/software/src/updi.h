@@ -1,5 +1,5 @@
 // ===================================================================================
-// SerialUPDI Functions for CH551, CH552 and CH554                            * v1.0 *
+// SerialUPDI Functions for CH551, CH552 and CH554                            * v1.1 *
 // ===================================================================================
 
 #pragma once
@@ -61,7 +61,7 @@ inline void UPDI_break(void) {
 // Set BAUD rate (currently limited to max 230400 BAUD)
 // We don't need to be precise here as the AVR adapts with auto-baud.
 inline void UPDI_setBAUD(uint32_t baud) {
-  if      (baud >= 230400)              TH1 = (uint8_t)(256 - (FREQ_SYS / 16 / 230400));
-  else if (baud <= FREQ_SYS / 16 / 256) TH1 = 0;
-  else                                  TH1 = (uint8_t)(256 - (FREQ_SYS / 16 / baud));
+  if      (baud >= 230400)            TH1 = (uint8_t)(256 - (F_CPU / 16 / 230400));
+  else if (baud <= F_CPU / 16 / 256)  TH1 = 0;
+  else                                TH1 = (uint8_t)(256 - (F_CPU / 16 / baud));
 }

@@ -130,13 +130,14 @@
 #define USB_DEV_CLASS_COMM      0x02
 #define USB_DEV_CLASS_HID       0x03
 #define USB_DEV_CLASS_MONITOR   0x04
-#define USB_DEV_CLASS_PHYSIC_IF 0x05
+#define USB_DEV_CLASS_PHYSIC    0x05
 #define USB_DEV_CLASS_POWER     0x06
 #define USB_DEV_CLASS_PRINTER   0x07
 #define USB_DEV_CLASS_STORAGE   0x08
 #define USB_DEV_CLASS_HUB       0x09
 #define USB_DEV_CLASS_DATA      0x0A
-#define USB_DEV_CLASS_VEN_SPEC  0xFF
+#define USB_DEV_CLASS_MISC      0xEF
+#define USB_DEV_CLASS_VENDOR    0xFF
 #endif
 
 // USB endpoint type and attributes

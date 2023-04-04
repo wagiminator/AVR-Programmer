@@ -1,5 +1,5 @@
 // ===================================================================================
-// USBtinyISP and SerialUPDI Functions for CH551, CH552 and CH554             * v1.0 *
+// USBtinyISP and SerialUPDI Functions for CH551, CH552 and CH554             * v1.1 *
 // ===================================================================================
 
 #include "gpio.h"
@@ -63,15 +63,14 @@ void ISP_disconnect(void) {
 
 // Set SPI clock frequency
 inline void ISP_setSpeed(void) {
-  if(sck_period <= (uint8_t)(255000000 / FREQ_SYS))
-    SPI0_CK_SE = (uint8_t)(FREQ_SYS / 1000000) * sck_period;
+  if(sck_period <= (uint8_t)(255000000 / F_CPU))
+    SPI0_CK_SE = (uint8_t)(F_CPU / 1000000) * sck_period;
   else SPI0_CK_SE = 255;
 }
 
 // Issue one SPI command.
-static void ISP_spi(uint8_t* cmd, uint8_t* res) {
-  uint8_t i;
-  for(i=4; i; i--) {
+static void ISP_spi(uint8_t* cmd, uint8_t* res, uint8_t n) {
+  while(n--) {
     SPI0_DATA = *cmd++;
     while(!S0_FREE);
     *res++ = SPI0_DATA;
@@ -87,7 +86,7 @@ static void ISP_spi_rw(void) {
   if(a & 1) cmd[0] |= 0x08;
   cmd[1] = a >> 9;
   cmd[2] = a >> 1;
-  ISP_spi(cmd, res);
+  ISP_spi(cmd, res, 4);
 }
 
 // ===================================================================================
@@ -184,18 +183,17 @@ uint8_t ISP_control(void) {
   if((USB_setupBuf->bRequestType & USB_REQ_TYP_MASK) == USB_REQ_TYP_VENDOR) {
     USB_MSG_flags = USB_FLG_USE_USER_RW;
     switch(SetupReq) {
-      case USBTINY_ECHO:                  // not fully tested yet...
-        EP0_buffer[1] = 0x21;
-        return 8;
+      case USBTINY_ECHO:
+        return 8;                         // just send it back
 
-      case USBTINY_READ:                  // not implemented yet, not necessary?
-        EP0_buffer[0] = 0x00;
-        return 1;
+      case USBTINY_READ:
+        return 1;                         // just send a dummy byte
 
-      case USBTINY_WRITE:                 // not implemented yet, not necessary?
+      case USBTINY_WRITE:
       case USBTINY_CLR:
       case USBTINY_SET:
-        return 0;
+      case USBTINY_DDRWRITE:
+        return 0;                         // not necessary
 
       case USBTINY_POWERUP:
         // Set SPI clock frequency
@@ -213,11 +211,16 @@ uint8_t ISP_control(void) {
 
       case USBTINY_SPI:
         returnLen = *((uint16_t*)(EP0_buffer + 2)); // use returnLen to store first 2 byte temporarily
-        ISP_spi(EP0_buffer + 2, EP0_buffer + 0);
+        ISP_spi(EP0_buffer + 2, EP0_buffer + 0, 4);
         return 4;
 
+      case USBTINY_SPI1:
+        returnLen = *((uint16_t*)(EP0_buffer + 2)); // use returnLen to store first 2 byte temporarily
+        ISP_spi(EP0_buffer + 2, EP0_buffer + 0, 1);
+        return 1;
+
       case USBTINY_POLL_BYTES:            // not fully tested yet...
-        ISP_spi(EP0_buffer + 2, EP0_buffer + 0);
+        ISP_spi(EP0_buffer + 2, EP0_buffer + 0, 4);
         poll1 = EP0_buffer[2];
         poll2 = EP0_buffer[3];
         return 0;
@@ -309,7 +312,7 @@ void ISP_EP0_OUT(void) {
           cmd[0] ^= 0x60;                 // turn write into read
           for(usec=0; usec<timeout; usec+=32*sck_period) {
             // when timeout > 0, poll until byte is written
-            ISP_spi(cmd,res);
+            ISP_spi(cmd, res, 4);
             r = res[3];
             if(r == cmd[3] && r != poll1 && r != poll2) break;
           }

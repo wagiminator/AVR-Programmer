@@ -136,7 +136,8 @@
 #define USB_DEV_CLASS_STORAGE   0x08
 #define USB_DEV_CLASS_HUB       0x09
 #define USB_DEV_CLASS_DATA      0x0A
-#define USB_DEV_CLASS_VEN_SPEC  0xFF
+#define USB_DEV_CLASS_MISC      0xEF
+#define USB_DEV_CLASS_VENDOR    0xFF
 #endif
 
 // USB endpoint type and attributes
