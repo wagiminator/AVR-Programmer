@@ -179,7 +179,7 @@ void ISP_reset(void) {
 // Handle non-standard control requests
 uint8_t ISP_control(void) {
   uint8_t i;
-  uint16_t returnLen;
+  uint8_t returnLen;
   if((USB_setupBuf->bRequestType & USB_REQ_TYP_MASK) == USB_REQ_TYP_VENDOR) {
     USB_MSG_flags = USB_FLG_USE_USER_RW;
     switch(SetupReq) {
@@ -196,26 +196,20 @@ uint8_t ISP_control(void) {
         return 0;                         // not necessary
 
       case USBTINY_POWERUP:
-        // Set SPI clock frequency
         sck_period = EP0_buffer[2];
-        ISP_setSpeed();
-
-        // Connect ISP bus
-        ISP_connect();
+        ISP_setSpeed();                   // set SPI clock frequency
+        ISP_connect();                    // connect ISP bus
         return 0;
 
       case USBTINY_POWERDOWN:
-        // Disconnect ISP bus
-        ISP_disconnect();
+        ISP_disconnect();                 // disconnect ISP bus
         return 0;
 
       case USBTINY_SPI:
-        returnLen = *((uint16_t*)(EP0_buffer + 2)); // use returnLen to store first 2 byte temporarily
         ISP_spi(EP0_buffer + 2, EP0_buffer + 0, 4);
         return 4;
 
       case USBTINY_SPI1:
-        returnLen = *((uint16_t*)(EP0_buffer + 2)); // use returnLen to store first 2 byte temporarily
         ISP_spi(EP0_buffer + 2, EP0_buffer + 0, 1);
         return 1;
 
@@ -236,7 +230,7 @@ uint8_t ISP_control(void) {
           EP0_buffer[i] = res[3];
         }
         SetupLen -= returnLen;
-        return (uint8_t)returnLen;
+        return returnLen;
 
       case USBTINY_FLASH_WRITE:
       case USBTINY_EEPROM_WRITE:
@@ -245,7 +239,7 @@ uint8_t ISP_control(void) {
         if(SetupReq == USBTINY_FLASH_WRITE) cmd0 = 0x40;
         else cmd0 = 0xc0;
         returnLen = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
-        return (uint8_t)returnLen;
+        return returnLen;
 
       default:
         return 0xFF;
