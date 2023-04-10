@@ -60,7 +60,7 @@ Install the [Arduino IDE](https://www.arduino.cc/en/software) if you haven't alr
 - Click **Upload**.
 
 ## Installing Drivers for the picoAVR
-On Linux, you don't need to install a driver. Windows users may need to install the [usbtiny driver](https://learn.adafruit.com/usbtinyisp). For Windows 10/11, you can also use the [Zadig Tool](https://zadig.akeo.ie/) to install the correct driver. Click on "Options" -> "List all devices" and select the USBtiny. Then install the libusb-win32 driver. To do this, the picoISP must be connected to your PC. You can also use the Zadig Tool to install the CDC driver for the CDC Interface.
+On Linux, you don't need to install a driver. Windows users may need to install the [usbtiny driver](https://learn.adafruit.com/usbtinyisp). For Windows 10/11, you can also use the [Zadig Tool](https://zadig.akeo.ie/) to install the correct driver. Click on "Options" -> "List all devices" and select the USBtiny. Then install the libusb-win32 driver. To do this, the picoAVR must be connected to your PC. You can also use the Zadig Tool to install the CDC driver for the CDC Serial Interface.
 
 # Operating Instructions
 - Select the programming voltage (3.3V or 5V) with the voltage selection switch.
