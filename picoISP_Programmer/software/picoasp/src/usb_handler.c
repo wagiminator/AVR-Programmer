@@ -5,10 +5,10 @@
 #include "ch554.h"
 #include "usb_handler.h"
 
-uint16_t SetupLen;
+uint8_t  USB_MSG_flags = 0;
 uint8_t  SetupReq, UsbConfig;
+uint16_t SetupLen;
 __code uint8_t *pDescr;
-volatile uint8_t USB_MSG_flags = 0; // copied from VUSB
 
 // ===================================================================================
 // Fast Copy Function
@@ -109,16 +109,17 @@ void USB_EP0_SETUP(void) {
                 pDescr = USB_REPORT_DESCR;
                 len = USB_REPORT_DESCR_LEN;
               }
-              else len = 0xff;
+              else len = 0xFF;
               break;
             #endif
 
             default:
-              len = 0xff;                         // unsupported descriptors or error
+              len = 0xFF;                         // unsupported descriptors or error
               break;
           }
 
-          if(len != 0xff) {
+          if(len != 0xFF) {
+            USB_MSG_flags = USB_FLG_MSGPTR_IS_ROM;
             if(SetupLen > len) SetupLen = len;    // limit length
             len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
             USB_EP0_copyDescr(len);               // copy descriptor to Ep0
@@ -274,14 +275,14 @@ void USB_EP0_SETUP(void) {
           break;
 
         default:
-          len = 0xff;                       // failed
+          len = 0xFF;                       // failed
           break;
       }
     }
   }
-  else len = 0xff;                          // wrong packet length
+  else len = 0xFF;                          // wrong packet length
 
-  if(len == 0xff) {
+  if(len == 0xFF) {
     SetupReq = 0xFF;
     UEP0_CTRL = bUEP_R_TOG | bUEP_T_TOG | UEP_R_RES_STALL | UEP_T_RES_STALL;//STALL
   }
@@ -297,17 +298,17 @@ void USB_EP0_SETUP(void) {
 
 void USB_EP0_IN(void) {
   uint8_t len;
+  if(USB_MSG_flags & USB_FLG_MSGPTR_IS_ROM) {
+    len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
+    USB_EP0_copyDescr(len);                       // copy descriptor to Ep0                                
+    SetupLen  -= len;
+    pDescr    += len;
+    UEP0_T_LEN = len;
+    UEP0_CTRL ^= bUEP_T_TOG;                      // switch between DATA0 and DATA1
+    return;  
+  }
+
   switch(SetupReq) {
-
-    case USB_GET_DESCRIPTOR:
-      len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
-      USB_EP0_copyDescr(len);                     // copy descriptor to Ep0                                
-      SetupLen  -= len;
-      pDescr    += len;
-      UEP0_T_LEN = len;
-      UEP0_CTRL ^= bUEP_T_TOG;                    // switch between DATA0 and DATA1
-      break;
-
     case USB_SET_ADDRESS:
       USB_DEV_AD = USB_DEV_AD & bUDA_GP_BIT | SetupLen;
       UEP0_CTRL  = UEP_R_RES_ACK | UEP_T_RES_NAK;

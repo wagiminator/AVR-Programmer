@@ -16,7 +16,7 @@ The simple and cheap High-Voltage Serial UPDI Programmer is a device designed sp
 ![SerialUPDI_HV_Prog_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/SerialUPDI_HV_Programmer/documentation/SerialUPDI_HV_Prog_pic1.jpg)
 
 ## [picoISP Programmer - CH552E](https://github.com/wagiminator/AVR-Programmer/tree/master/picoISP_Programmer)
-The CH55x-based picoISP is a simple and cheap ISP programmer for AVR microcontrollers with voltage selection switch (5V and 3.3V). Since it is compatible with the [USBtinyISP](https://learn.adafruit.com/usbtinyisp) it works fine with AVRdude and the Arduino IDE.
+The CH55x-based picoISP is a simple and cheap USB-based in-system programmer (ISP) for AVR microcontrollers with voltage selection switch (5V and 3.3V) and compatible with the [USBtinyISP](https://learn.adafruit.com/usbtinyisp) or the [USBasp](https://www.fischl.de/usbasp/) depending on the firmware. The picoISP supports a wide range of AVR microcontrollers, including the ATtiny and ATmega series, and can be used with a variety of software development tools such as the Arduino IDE, Atmel Studio, and AVRdude.
 
 ![picoISP_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/picoISP_Programmer/documentation/picoISP_pic1.jpg)
 

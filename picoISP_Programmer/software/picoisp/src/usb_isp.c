@@ -7,17 +7,17 @@
 #include "usb_isp.h"
 #include "usb_handler.h"
 
-volatile uint8_t sck_period = 10;         // SCK period in microseconds (1..250)
-volatile uint8_t poll1;                   // first poll byte for write
-volatile uint8_t poll2;                   // second poll byte for write
-volatile __xdata uint16_t address;        // read/write address
-volatile __xdata uint16_t timeout;        // write timeout in usec
-volatile uint8_t cmd0;                    // current read/write command byte
-volatile __xdata uint8_t cmd[4];          // SPI command buffer
-volatile __xdata uint8_t res[4];          // SPI result buffer
-extern uint16_t SetupLen;                 // USB handler
-extern void USB_EP0_IN(void);             // EP0 IN buffer
-extern void USB_EP0_OUT(void);            // EP0 OUT buffer
+uint8_t sck_period = 10;          // SCK period in microseconds (1..250)
+uint8_t poll1;                    // first poll byte for write
+uint8_t poll2;                    // second poll byte for write
+uint16_t address;                 // read/write address
+uint16_t timeout;                 // write timeout in usec
+uint8_t cmd0;                     // current read/write command byte
+__xdata uint8_t cmd[4];           // SPI command buffer
+__xdata uint8_t res[4];           // SPI result buffer
+
+extern void USB_EP0_IN(void);     // EP0 IN buffer
+extern void USB_EP0_OUT(void);    // EP0 OUT buffer
 
 // ===================================================================================
 // SPI Functions
@@ -60,7 +60,7 @@ inline void ISP_setSpeed(void) {
 }
 
 // Issue one SPI command.
-static void ISP_spi(uint8_t* cmd, uint8_t* res, uint8_t n) {
+static void ISP_spi(__xdata uint8_t* cmd, __xdata uint8_t* res, uint8_t n) {
   while(n--) {
     SPI0_DATA = *cmd++;
     while(!S0_FREE);
@@ -81,7 +81,7 @@ static void ISP_spi_rw(void) {
 }
 
 // ===================================================================================
-// ISP-Specific USB Handler Functions
+// ISP-Specific Setup and Reset Functions
 // ===================================================================================
 
 // Setup ISP endpoints
@@ -97,10 +97,13 @@ void ISP_reset(void) {
   UEP1_CTRL = bUEP_AUTO_TOG | UEP_T_RES_NAK;
 }
 
+// ===================================================================================
+// ISP-Specific USB Control Transfers
+// ===================================================================================
+
 // Handle non-standard control requests
 uint8_t ISP_control(void) {
-  uint8_t i;
-  uint8_t returnLen;
+  uint8_t len, i;
   if((USB_setupBuf->bRequestType & USB_REQ_TYP_MASK) == USB_REQ_TYP_VENDOR) {
     USB_MSG_flags = USB_FLG_USE_USER_RW;
     switch(SetupReq) {
@@ -145,13 +148,13 @@ uint8_t ISP_control(void) {
         address = *(uint16_t*) &EP0_buffer[4];
         if(SetupReq == USBTINY_FLASH_READ) cmd0 = 0x20;
         else cmd0 = 0xa0;
-        returnLen = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
-        for(i=0; i<returnLen; i++) {
+        len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
+        for(i=0; i<len; i++) {
           ISP_spi_rw();
           EP0_buffer[i] = res[3];
         }
-        SetupLen -= returnLen;
-        return returnLen;
+        SetupLen -= len;
+        return len;
 
       case USBTINY_FLASH_WRITE:
       case USBTINY_EEPROM_WRITE:
@@ -159,8 +162,25 @@ uint8_t ISP_control(void) {
         timeout = *(uint16_t*) &EP0_buffer[2];
         if(SetupReq == USBTINY_FLASH_WRITE) cmd0 = 0x40;
         else cmd0 = 0xc0;
-        returnLen = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
-        return returnLen;
+        len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
+        return len;
+
+      #ifdef WCID_VENDOR_CODE
+      case WCID_VENDOR_CODE:
+        len = WCID_FEATURE_DESCR[0];
+        if(USB_setupBuf->wIndexL == 0x04) {
+          USB_MSG_flags = USB_FLG_MSGPTR_IS_ROM;
+          pDescr = WCID_FEATURE_DESCR;
+          len = WCID_FEATURE_DESCR[0];
+          if(SetupLen > len) SetupLen = len;  // limit length
+          len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
+          USB_EP0_copyDescr(len);             // copy descriptor to Ep0
+          SetupLen -= len;
+          pDescr   += len;
+          return len;
+        }
+        return 0xFF;
+      #endif
 
       default:
         return 0xFF;
@@ -169,21 +189,24 @@ uint8_t ISP_control(void) {
   else return 0xFF;
 }
 
+// ===================================================================================
+// ISP-Specific USB Endpoint Handlers
+// ===================================================================================
+
 // Endpoint 0 IN handler
 void ISP_EP0_IN(void) {
-  uint8_t i;
-  uint8_t returnLen;
+  uint8_t len, i;
   if(USB_MSG_flags & USB_FLG_USE_USER_RW) {
     switch(SetupReq) {
       case USBTINY_FLASH_READ:
       case USBTINY_EEPROM_READ:
-        returnLen = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
-        for(i=0; i<returnLen; i++) {
+        len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
+        for(i=0; i<len; i++) {
           ISP_spi_rw();
           EP0_buffer[i] = res[3];
         }
-        SetupLen -= returnLen;
-        UEP0_T_LEN = returnLen;
+        SetupLen -= len;
+        UEP0_T_LEN = len;
         UEP0_CTRL ^= bUEP_T_TOG;
         break;
       default:
@@ -197,15 +220,14 @@ void ISP_EP0_IN(void) {
 
 // Endpoint 0 OUT handler
 void ISP_EP0_OUT(void) {
-  uint8_t i, r;
-  uint8_t returnLen;
+  uint8_t len, i, r;
   uint16_t usec;
   if(USB_MSG_flags & USB_FLG_USE_USER_RW) {
     switch(SetupReq) {
       case USBTINY_FLASH_WRITE:
       case USBTINY_EEPROM_WRITE:
-        returnLen = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
-        for(i=0; i<returnLen; i++) {
+        len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
+        for(i=0; i<len; i++) {
           cmd[3] = EP0_buffer[i];
           ISP_spi_rw();
           cmd[0] ^= 0x60;                 // turn write into read
@@ -216,8 +238,8 @@ void ISP_EP0_OUT(void) {
             if(r == cmd[3] && r != poll1 && r != poll2) break;
           }
         }
-        SetupLen -= returnLen;
-        UEP0_T_LEN = (SetupLen > 0) ? returnLen : 0;
+        SetupLen -= len;
+        UEP0_T_LEN = (SetupLen > 0) ? len : 0;
         UEP0_CTRL ^= bUEP_R_TOG;
         break;
       default:

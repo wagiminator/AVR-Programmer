@@ -4,7 +4,6 @@
 
 #pragma once
 #include <stdint.h>
-#include "ch554.h"
 
 // Generic requests
 #define USBTINY_ECHO          0   // echo test
@@ -24,9 +23,6 @@
 #define USBTINY_EEPROM_WRITE  12  // write eeprom (wIndex:address, wValue:timeout)
 #define USBTINY_DDRWRITE      13  // set port direction
 #define USBTINY_SPI1          14  // send single byte via SPI
-
-// USB message flags
-#define USB_FLG_USE_USER_RW   1
 
 // Functions
 void ISP_init(void);

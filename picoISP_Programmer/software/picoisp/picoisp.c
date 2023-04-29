@@ -1,6 +1,6 @@
 // ===================================================================================
 // Project:   picoISP AVR ISP Programmer based on CH551, CH552, CH554
-// Version:   v1.2
+// Version:   v1.3
 // Year:      2023
 // Author:    Stefan Wagner
 // Github:    https://github.com/wagiminator
@@ -41,10 +41,12 @@
 // -----------------------
 // Select the programming voltage (3.3V or 5V) with the voltage selection switch.
 // Plug the picoISP into a USB port on your PC, it should be identified as a 
-// USBtinyISP. Connect the picoISP to the target board via the 6-pin ICSP connector.  
-// Windows users may need to install a driver (https://learn.adafruit.com/usbtinyisp).
+// USBtinyISP. Connect the picoISP to the target board via the 6-pin ICSP connector.
 // The picoISP should work with any IDE or programming software that supports the
 // USBtinyISP programmer.
+// Windows users may need to install a driver manually using the adafruit driver 
+// (https://learn.adafruit.com/usbtinyisp) or the Zadig tool (https://zadig.akeo.ie/).
+// However, functionality, especially with newer Windows versions, is not guaranteed.
 
 
 // ===================================================================================
