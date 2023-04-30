@@ -76,8 +76,8 @@ uint8_t ASP_control(void) {
       case USBASP_FUNC_READFLASH:
       case USBASP_FUNC_READEEPROM:
         if(!prog_address_newmode)
-          prog_address = ((uint16_t)EP0_buffer[3] << 8) | EP0_buffer[2];
-        prog_nbytes    = ((uint16_t)EP0_buffer[7] << 8) | EP0_buffer[6];
+          prog_address = *(uint16_t*) &EP0_buffer[2];
+        prog_nbytes    = *(uint16_t*) &EP0_buffer[6];
         if(SetupReq == USBASP_FUNC_READFLASH)
              prog_state = PROG_STATE_READFLASH;
         else prog_state = PROG_STATE_READEEPROM;        
@@ -95,8 +95,8 @@ uint8_t ASP_control(void) {
       case USBASP_FUNC_WRITEFLASH:
       case USBASP_FUNC_WRITEEEPROM:
         if(!prog_address_newmode)
-          prog_address = ((uint16_t)EP0_buffer[3] << 8) | EP0_buffer[2];
-        prog_nbytes    = ((uint16_t)EP0_buffer[7] << 8) | EP0_buffer[6];
+          prog_address = *(uint16_t*) &EP0_buffer[2];
+        prog_nbytes    = *(uint16_t*) &EP0_buffer[6];
 
         if(SetupReq == USBASP_FUNC_WRITEFLASH) {
           prog_pagesize   = EP0_buffer[4];
@@ -115,7 +115,7 @@ uint8_t ASP_control(void) {
 
       case USBASP_FUNC_SETLONGADDRESS:
         prog_address_newmode = 1;
-        prog_address = *((uint32_t*)&EP0_buffer[2]);
+        prog_address = *(uint32_t*) &EP0_buffer[2];
         return 0;
 
       case USBASP_FUNC_SETISPSCK:
@@ -124,7 +124,7 @@ uint8_t ASP_control(void) {
         return 1;
 
       case USBASP_FUNC_TPI_CONNECT:
-        TPI_dly_cnt = (((uint16_t)EP0_buffer[3] << 8) | EP0_buffer[2]);
+        TPI_dly_cnt = *(uint16_t*) &EP0_buffer[2];
         TPI_connect();
         return 0;
 
@@ -142,11 +142,11 @@ uint8_t ASP_control(void) {
 
       case USBASP_FUNC_TPI_READBLOCK:
       case USBASP_FUNC_TPI_WRITEBLOCK:
-        prog_address = ((uint16_t)EP0_buffer[3] << 8) | EP0_buffer[2];
-        prog_nbytes  = ((uint16_t)EP0_buffer[7] << 8) | EP0_buffer[6];
+        prog_address = *(uint16_t*) &EP0_buffer[2];
+        prog_nbytes  = *(uint16_t*) &EP0_buffer[6];
         if(SetupReq == USBASP_FUNC_TPI_READBLOCK)
              prog_state = PROG_STATE_TPI_READ;
-        else PROG_STATE_TPI_WRITE;
+        else prog_state = PROG_STATE_TPI_WRITE;
         return 0;
 
       #ifdef WCID_VENDOR_CODE
@@ -156,11 +156,6 @@ uint8_t ASP_control(void) {
           USB_MSG_flags = USB_FLG_MSGPTR_IS_ROM;
           pDescr = WCID_FEATURE_DESCR;
           len = WCID_FEATURE_DESCR[0];
-          if(SetupLen > len) SetupLen = len;  // limit length
-          len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
-          USB_EP0_copyDescr(len);             // copy descriptor to Ep0
-          SetupLen -= len;
-          pDescr   += len;
           return len;
         }
         return 0xFF;

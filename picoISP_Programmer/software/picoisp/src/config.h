@@ -23,7 +23,3 @@
 #define PRODUCT_STR         'U','S','B','t','i','n','y','I','S','P'
 #define SERIAL_STR          'p','i','c','o','I','S','P'
 #define INTERFACE_STR       'T','i','n','y','S','P','I'
-
-// Windows Compatible ID (WCID) code for automated driver installation.
-// Uncomment this define to enable experimental WCID feature.
-//#define WCID_VENDOR_CODE    0x5E

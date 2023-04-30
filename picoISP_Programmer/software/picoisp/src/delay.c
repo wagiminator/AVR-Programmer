@@ -68,19 +68,3 @@ void DLY_ms(uint16_t n) {           // delay in ms
     n--;
   }
 }
-
-// ===================================================================================
-// Delay 20+4*(n-1) Clock Cycles
-// ===================================================================================
-#pragma callee_saves _delay_more_cycles
-void _delay_more_cycles (uint8_t n) __naked {
-  n;              // stop unreferenced arg warning
-  __asm
-    .even         ; make predictable cycles for jumps
-    push ar7      ; 2 cycles
-    mov  r7, dpl  ; 2 cycles
-    djnz r7, .+0  ; 2/4 cycles
-    pop  ar7      ; 2 cycles
-    ret           ; 4|5 cycles
-  __endasm;
-}

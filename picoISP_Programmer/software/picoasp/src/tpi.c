@@ -7,12 +7,12 @@
 #include "delay.h"
 #include "config.h"
 
-uint16_t TPI_dly_cnt; 
+__xdata uint16_t TPI_dly_cnt; 
 
 // Transmit/receive one bit via TPI; b must be 1 when receiving
 __bit TPI_clockBit(__bit b) {
   __bit result;
-  __idata uint16_t cnt;
+  uint16_t cnt;
   PIN_write(PIN_MOSI, b);                 // set DATA according to bit
   cnt = TPI_dly_cnt; while(cnt--);        // delay
   PIN_high(PIN_SCK);                      // CLK high

@@ -52,12 +52,12 @@
 #define NVMCMD_WORD_WRITE       0x1D
 
 // Globals
-extern uint16_t TPI_dly_cnt;    // number of iterations in tpi_delay loop
+extern __xdata uint16_t TPI_dly_cnt;    // number of iterations in tpi_delay loop
 
 // Functions
-void TPI_connect(void);         // connect TPI bus
-void TPI_disconnect(void);      // disconnect TPI bus
-void TPI_writeByte(uint8_t b);  // send raw byte via TPI
-uint8_t TPI_readByte(void);     // receive raw byte via TPI
+void TPI_connect(void);                 // connect TPI bus
+void TPI_disconnect(void);              // disconnect TPI bus
+void TPI_writeByte(uint8_t b);          // send raw byte via TPI
+uint8_t TPI_readByte(void);             // receive raw byte via TPI
 void TPI_readBlock(uint16_t addr, __xdata uint8_t* buf, uint8_t len);
 void TPI_writeBlock(uint16_t addr, __xdata uint8_t* buf, uint8_t len);

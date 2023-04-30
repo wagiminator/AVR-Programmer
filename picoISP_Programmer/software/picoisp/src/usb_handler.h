@@ -42,11 +42,10 @@ void ISP_EP1_IN(void);
 #define EP0_OUT_callback    ISP_EP0_OUT
 #define EP1_IN_callback     ISP_EP1_IN
 
-// ===================================================================================
 // USB Message Flags
-// ===================================================================================
 #define USB_FLG_USE_USER_RW       (1 << 0)
 #define USB_FLG_MSGPTR_IS_ROM     (1 << 6)
+#define USB_FLG_MSGPTR_IS_RAM     (1 << 7)
 
 // ===================================================================================
 // Functions

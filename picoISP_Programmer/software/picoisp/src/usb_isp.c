@@ -165,23 +165,6 @@ uint8_t ISP_control(void) {
         len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
         return len;
 
-      #ifdef WCID_VENDOR_CODE
-      case WCID_VENDOR_CODE:
-        len = WCID_FEATURE_DESCR[0];
-        if(USB_setupBuf->wIndexL == 0x04) {
-          USB_MSG_flags = USB_FLG_MSGPTR_IS_ROM;
-          pDescr = WCID_FEATURE_DESCR;
-          len = WCID_FEATURE_DESCR[0];
-          if(SetupLen > len) SetupLen = len;  // limit length
-          len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
-          USB_EP0_copyDescr(len);             // copy descriptor to Ep0
-          SetupLen -= len;
-          pDescr   += len;
-          return len;
-        }
-        return 0xFF;
-      #endif
-
       default:
         return 0xFF;
     }

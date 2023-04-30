@@ -19,7 +19,7 @@
 // ===================================================================================
 // USB Endpoint Addresses and Sizes
 // ===================================================================================
-#define EP0_SIZE        64
+#define EP0_SIZE        8
 #define EP1_SIZE        8
 
 #define EP0_ADDR        0
@@ -58,12 +58,3 @@ extern __code uint16_t InterfDescr[];
 #define USB_STR_DESCR_i3    (uint8_t*)SerDescr
 #define USB_STR_DESCR_i4    (uint8_t*)InterfDescr
 #define USB_STR_DESCR_ix    (uint8_t*)SerDescr
-
-// ===================================================================================
-// Windows Compatible ID (WCID) descriptors for automated driver installation
-// ===================================================================================
-#ifdef WCID_VENDOR_CODE
-extern __code uint8_t WCID_FEATURE_DESCR[];
-extern __code uint16_t MicrosoftDescr[];
-#define USB_STR_DESCR_ixee  (uint8_t*)MicrosoftDescr
-#endif

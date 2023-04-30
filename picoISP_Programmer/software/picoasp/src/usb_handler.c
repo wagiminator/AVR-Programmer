@@ -118,14 +118,7 @@ void USB_EP0_SETUP(void) {
               break;
           }
 
-          if(len != 0xFF) {
-            USB_MSG_flags = USB_FLG_MSGPTR_IS_ROM;
-            if(SetupLen > len) SetupLen = len;    // limit length
-            len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
-            USB_EP0_copyDescr(len);               // copy descriptor to Ep0
-            SetupLen -= len;
-            pDescr += len;
-          }
+          if(len != 0xFF) USB_MSG_flags = USB_FLG_MSGPTR_IS_ROM;
           break;
 
         case USB_SET_ADDRESS:
@@ -282,6 +275,13 @@ void USB_EP0_SETUP(void) {
   }
   else len = 0xFF;                          // wrong packet length
 
+  if(USB_MSG_flags & USB_FLG_MSGPTR_IS_ROM) {
+    if(SetupLen > len) SetupLen = len;      // limit length
+    len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
+    USB_EP0_copyDescr(len);                 // copy descriptor to Ep0
+    SetupLen -= len;
+    pDescr   += len;
+  }
   if(len == 0xFF) {
     SetupReq = 0xFF;
     UEP0_CTRL = bUEP_R_TOG | bUEP_T_TOG | UEP_R_RES_STALL | UEP_T_RES_STALL;//STALL
