@@ -141,12 +141,19 @@ uint8_t ASP_control(void) {
         return 0;
 
       case USBASP_FUNC_TPI_READBLOCK:
+        prog_address = *(uint16_t*) &EP0_buffer[2];
+        prog_nbytes  = *(uint16_t*) &EP0_buffer[6];
+        prog_state = PROG_STATE_TPI_READ;
+        len = SetupLen >= EP0_SIZE ? EP0_SIZE : SetupLen;
+        TPI_readBlock(prog_address, EP0_buffer, len);
+        prog_address += len;
+        SetupLen     -= len;
+        return len;
+
       case USBASP_FUNC_TPI_WRITEBLOCK:
         prog_address = *(uint16_t*) &EP0_buffer[2];
         prog_nbytes  = *(uint16_t*) &EP0_buffer[6];
-        if(SetupReq == USBASP_FUNC_TPI_READBLOCK)
-             prog_state = PROG_STATE_TPI_READ;
-        else prog_state = PROG_STATE_TPI_WRITE;
+        prog_state = PROG_STATE_TPI_WRITE;
         return 0;
 
       #ifdef WCID_VENDOR_CODE
