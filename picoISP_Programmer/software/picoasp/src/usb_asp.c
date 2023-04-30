@@ -9,8 +9,8 @@
 #include "usb_asp.h"
 #include "usb_handler.h"
 
+__bit    prog_address_newmode = 0;
 uint8_t  prog_state = PROG_STATE_IDLE;
-uint8_t  prog_address_newmode = 0;
 uint8_t  prog_blockflags;
 uint8_t  prog_pagecounter;
 uint32_t prog_address;
