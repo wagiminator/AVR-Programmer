@@ -151,7 +151,6 @@ uint8_t ASP_control(void) {
 
       #ifdef WCID_VENDOR_CODE
       case WCID_VENDOR_CODE:
-        len = WCID_FEATURE_DESCR[0];
         if(USB_setupBuf->wIndexL == 0x04) {
           USB_MSG_flags = USB_FLG_MSGPTR_IS_ROM;
           pDescr = WCID_FEATURE_DESCR;
