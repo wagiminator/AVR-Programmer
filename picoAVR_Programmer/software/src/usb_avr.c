@@ -29,10 +29,10 @@ volatile __xdata uint8_t cmd[4];          // SPI command buffer
 volatile __xdata uint8_t res[4];          // SPI result buffer
 
 volatile __xdata uint8_t CDC_controlLineState  = 0; // control line state
-volatile __xdata uint8_t CDC_EP3_readByteCount = 0; // number of data bytes in IN buffer
-volatile __xdata uint8_t CDC_EP3_readPointer   = 0; // data pointer for fetching
-volatile __bit CDC_EP3_writeBusyFlag = 0;           // flag of whether upload pointer is busy
-__xdata uint8_t CDC_EP3_writePointer = 0;           // data pointer for writing
+volatile __xdata uint8_t CDC_readByteCount = 0;     // number of data bytes in IN buffer
+volatile __xdata uint8_t CDC_readPointer   = 0;     // data pointer for fetching
+volatile __bit CDC_writeBusyFlag = 0;               // flag of whether upload pointer is busy
+__xdata uint8_t CDC_writePointer = 0;               // data pointer for writing
 
 #define CDC_DTR_flag  (CDC_controlLineState & 1)
 #define CDC_RTS_flag  ((CDC_controlLineState >> 1) & 1)
@@ -95,38 +95,38 @@ static void ISP_spi_rw(void) {
 
 // Check number of bytes in the IN buffer
 uint8_t CDC_available(void) {
-  return CDC_EP3_readByteCount;
+  return CDC_readByteCount;
 }
 
 // Check if OUT buffer is ready to be written
 __bit CDC_ready(void) {
-  return(!CDC_EP3_writeBusyFlag);
+  return(!CDC_writeBusyFlag);
 }
 
 // Flush the OUT buffer
 void CDC_flush(void) {
-  if(!CDC_EP3_writeBusyFlag && CDC_EP3_writePointer > 0) {  // not busy and buffer not empty?
-    UEP3_T_LEN = CDC_EP3_writePointer;                      // number of bytes in OUT buffer
+  if(!CDC_writeBusyFlag && CDC_writePointer > 0) {      // not busy and buffer not empty?
+    UEP3_T_LEN = CDC_writePointer;                      // number of bytes in OUT buffer
     UEP3_CTRL  = UEP3_CTRL & ~MASK_UEP_T_RES | UEP_T_RES_ACK; // respond ACK
-    CDC_EP3_writeBusyFlag = 1;                              // busy for now
-    CDC_EP3_writePointer  = 0;                              // reset write pointer
+    CDC_writeBusyFlag = 1;                              // busy for now
+    CDC_writePointer  = 0;                              // reset write pointer
   }
 }
 
 // Write single character to OUT buffer
 void CDC_write(char c) {
-  while(CDC_EP3_writeBusyFlag);                             // wait for ready to write
-  EP3_buffer[MAX_PACKET_SIZE + CDC_EP3_writePointer++] = c; // write character
-  if(CDC_EP3_writePointer == EP3_SIZE) CDC_flush();         // flush if buffer full
+  while(CDC_writeBusyFlag);                             // wait for ready to write
+  EP3_buffer[MAX_PACKET_SIZE + CDC_writePointer++] = c; // write character
+  if(CDC_writePointer == EP3_SIZE) CDC_flush();         // flush if buffer full
 }
 
 // Read single character from IN buffer
 char CDC_read(void) {
   char data;
-  while(!CDC_EP3_readByteCount);                            // wait for data
-  data = EP3_buffer[CDC_EP3_readPointer++];                 // get character
-  if(--CDC_EP3_readByteCount == 0)                          // dec number of bytes in buffer
-    UEP3_CTRL = UEP3_CTRL & ~MASK_UEP_R_RES | UEP_R_RES_ACK;// request new data if empty
+  while(!CDC_readByteCount);                            // wait for data
+  data = EP3_buffer[CDC_readPointer++];                 // get character
+  if(--CDC_readByteCount == 0)                          // dec number of bytes in buffer
+    UEP3_CTRL = UEP3_CTRL & ~MASK_UEP_R_RES | UEP_R_RES_ACK; // request new data if empty
   return data;
 }
 
@@ -152,9 +152,9 @@ void AVR_init(void) {
 
 // Setup ISP/CDC endpoints
 void ISP_setup(void) {
-  UEP1_DMA    = EP1_ADDR;                   // EP1 data transfer address
-  UEP2_DMA    = EP2_ADDR;                   // EP2 data transfer address
-  UEP3_DMA    = EP3_ADDR;                   // EP3 data transfer address
+  UEP1_DMA    = (uint16_t)EP1_buffer;       // EP1 data transfer address
+  UEP2_DMA    = (uint16_t)EP2_buffer;       // EP2 data transfer address
+  UEP3_DMA    = (uint16_t)EP3_buffer;       // EP3 data transfer address
   UEP1_CTRL   = bUEP_AUTO_TOG               // EP1 Auto flip sync flag
               | UEP_T_RES_NAK;              // EP1 IN transaction returns NAK
   UEP2_CTRL   = bUEP_AUTO_TOG               // EP2 Auto flip sync flag
@@ -172,8 +172,8 @@ void ISP_reset(void) {
   UEP1_CTRL = bUEP_AUTO_TOG | UEP_T_RES_NAK;
   UEP2_CTRL = bUEP_AUTO_TOG | UEP_T_RES_NAK;
   UEP3_CTRL = bUEP_AUTO_TOG | UEP_T_RES_NAK | UEP_R_RES_ACK;
-  CDC_EP3_readByteCount = 0;                // reset received bytes counter
-  CDC_EP3_writeBusyFlag = 0;                // reset write busy flag
+  CDC_readByteCount = 0;                // reset received bytes counter
+  CDC_writeBusyFlag = 0;                // reset write busy flag
 }
 
 // Handle non-standard control requests
@@ -353,15 +353,15 @@ void CDC_EP2_IN(void) {
 void CDC_EP3_IN(void) {
   UEP3_T_LEN = 0;                                           // no data to send anymore
   UEP3_CTRL = UEP3_CTRL & ~MASK_UEP_T_RES | UEP_T_RES_NAK;  // respond NAK by default
-  CDC_EP3_writeBusyFlag = 0;                                // clear busy flag
+  CDC_writeBusyFlag = 0;                                    // clear busy flag
 }
 
 // Endpoint 3 OUT handler (bulk data transfer from host)
 void CDC_EP3_OUT(void) {
   if(U_TOG_OK) {                                            // discard unsynchronized packets
-    CDC_EP3_readByteCount = USB_RX_LEN;                     // set number of received data bytes
-    CDC_EP3_readPointer = 0;                                // reset read pointer for fetching
-    if(CDC_EP3_readByteCount) 
+    CDC_readByteCount = USB_RX_LEN;                         // set number of received data bytes
+    CDC_readPointer = 0;                                    // reset read pointer for fetching
+    if(CDC_readByteCount) 
       UEP3_CTRL = UEP3_CTRL & ~MASK_UEP_R_RES | UEP_R_RES_NAK; // respond NAK after a packet. Let main code change response after handling.
   }
 }

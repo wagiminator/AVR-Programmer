@@ -1,6 +1,6 @@
 // ===================================================================================
 // Project:   picoAVR ISP + UPDI Programmer based on CH551, CH552, CH554
-// Version:   v1.1
+// Version:   v1.2
 // Year:      2023
 // Author:    Stefan Wagner
 // Github:    https://github.com/wagiminator

@@ -7,13 +7,8 @@
 #include "usb_descr.h"
 
 // ===================================================================================
-// Endpoint Buffer
+// Variables
 // ===================================================================================
-__xdata __at (EP0_ADDR) uint8_t EP0_buffer[EP0_BUF_SIZE];     
-__xdata __at (EP1_ADDR) uint8_t EP1_buffer[EP1_BUF_SIZE];
-__xdata __at (EP2_ADDR) uint8_t EP2_buffer[EP2_BUF_SIZE];
-__xdata __at (EP3_ADDR) uint8_t EP3_buffer[2 * EP3_BUF_SIZE];
-
 #define USB_setupBuf ((PUSB_SETUP_REQ)EP0_buffer)
 extern uint8_t SetupReq;
 extern volatile uint8_t USB_MSG_flags;

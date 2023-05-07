@@ -55,7 +55,7 @@ Install the [Arduino IDE](https://www.arduino.cc/en/software) if you haven't alr
 - Go to **Tools** and choose the following board options:
   - **Clock Source:**   16 MHz (internal)
   - **Upload Method:**  USB
-  - **USB Settings:**   USER CODE /w 266B USB RAM
+  - **USB Settings:**   USER CODE /w 0B USB RAM
 - Connect the board and make sure the CH55x is in bootloader mode. 
 - Click **Upload**.
 

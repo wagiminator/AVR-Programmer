@@ -9,31 +9,31 @@
 // USB_PRODUCT_ID           - Product ID (16-bit word)
 // USB_DEVICE_VERSION       - Device version (16-bit BCD)
 // USB_MAX_POWER_mA         - Device max power in mA
-// All descriptor strings.
+// All string descriptors.
 
 #pragma once
 #include <stdint.h>
 #include "usb.h"
 
 // ===================================================================================
-// USB Endpoint Addresses and Sizes
+// USB Endpoint Definitions
 // ===================================================================================
 #define EP0_SIZE        8
 #define EP1_SIZE        8
 #define EP2_SIZE        8
 #define EP3_SIZE        64
 
-#define EP0_ADDR        0
-#define EP1_ADDR        (EP0_ADDR + EP0_BUF_SIZE)
-#define EP2_ADDR        (EP1_ADDR + EP1_BUF_SIZE)
-#define EP3_ADDR        (EP2_ADDR + EP2_BUF_SIZE)
-
 #define EP0_BUF_SIZE    EP_BUF_SIZE(EP0_SIZE)
 #define EP1_BUF_SIZE    EP_BUF_SIZE(EP1_SIZE)
 #define EP2_BUF_SIZE    EP_BUF_SIZE(EP2_SIZE)
-#define EP3_BUF_SIZE    EP_BUF_SIZE(EP3_SIZE)
+#define EP3_BUF_SIZE    EP_BUF_SIZE(EP3_SIZE) + 64
 
 #define EP_BUF_SIZE(x)  (x+2<64 ? x+2 : 64)
+
+extern __xdata uint8_t EP0_buffer[];
+extern __xdata uint8_t EP1_buffer[];
+extern __xdata uint8_t EP2_buffer[];
+extern __xdata uint8_t EP3_buffer[];
 
 // ===================================================================================
 // Device and Configuration Descriptors
