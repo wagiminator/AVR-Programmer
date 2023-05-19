@@ -87,6 +87,7 @@ void main(void) {
     // ISP stuff is handled via USB interrupts.
     // We only need to take care of USB-CDC to UPDI here.
     if(CDC_available()) {                   // something coming in via USB-CDC?
+      PIN_low(PIN_LED);                     // turn on LED (active low)
       if(TH1 == 0) {                        // slow speed? -> must be UPDI BREAK
         UPDI_break();                       // send UPDI break frame
         CDC_write(CDC_read());              // return BREAK frame
@@ -101,12 +102,15 @@ void main(void) {
         }
         CDC_flush();                        // flush OUT buffer
       }
+      PIN_high(PIN_LED);                    // turn off LED (active low)
     }
 
     if(UPDI_available()) {                  // something coming in via UPDI?
+      PIN_low(PIN_LED);                     // turn on LED (active low)
       while(UPDI_available())               // repeat for all incoming bytes
         CDC_write(UPDI_read());             // write received bytes to USB OUT buffer
       CDC_flush();                          // flush USB OUT buffer
+      PIN_high(PIN_LED);                    // turn off LED (active low)
     }
 
     WDT_reset();                            // reset watchdog
