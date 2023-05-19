@@ -1,6 +1,6 @@
 // ===================================================================================
 // Project:   picoAVR ISP + UPDI Programmer based on CH551, CH552, CH554
-// Version:   v1.2
+// Version:   v1.3
 // Year:      2023
 // Author:    Stefan Wagner
 // Github:    https://github.com/wagiminator
@@ -64,12 +64,17 @@ void USB_ISR(void) __interrupt(INT_NO_USB) {
   USB_interrupt();
 }
 
+void UART_interrupt(void);
+void UART_ISR(void) __interrupt(INT_NO_UART0) {
+  UART_interrupt();
+}
+
 // ===================================================================================
 // Main Function
 // ===================================================================================
 void main(void) {
   // Variables
-  uint8_t waitcounter;
+  uint8_t databyte;
 
   // Setup
   CLK_config();                             // configure system clock
@@ -89,17 +94,18 @@ void main(void) {
       }
       else {                                // normal data bytes?
         // Send data bytes via UPDI and write echo to USB OUT buffer
-        while(CDC_available()) CDC_write(UPDI_write(CDC_read()));
+        while(CDC_available()) {            // repeat for all incoming bytes
+          databyte = CDC_read();            // get data byte
+          UPDI_write(databyte);             // send byte via UPDI
+          CDC_write(databyte);              // send back echo
+        }
         CDC_flush();                        // flush OUT buffer
       }
     }
 
     if(UPDI_available()) {                  // something coming in via UPDI?
-      while(UPDI_available()) {             // repeat for all incoming bytes
+      while(UPDI_available())               // repeat for all incoming bytes
         CDC_write(UPDI_read());             // write received bytes to USB OUT buffer
-        waitcounter = 50;                   // wait max 50us for further bytes
-        while(!UPDI_available() && waitcounter--) DLY_us(1);
-      }
       CDC_flush();                          // flush USB OUT buffer
     }
 

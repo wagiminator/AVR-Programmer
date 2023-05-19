@@ -23,6 +23,11 @@
 #define EP2_SIZE        8
 #define EP3_SIZE        64
 
+#define EP0_ADDR        0
+#define EP1_ADDR        (EP0_ADDR + EP0_BUF_SIZE)
+#define EP2_ADDR        (EP1_ADDR + EP1_BUF_SIZE)
+#define EP3_ADDR        (EP2_ADDR + EP2_BUF_SIZE)
+
 #define EP0_BUF_SIZE    EP_BUF_SIZE(EP0_SIZE)
 #define EP1_BUF_SIZE    EP_BUF_SIZE(EP1_SIZE)
 #define EP2_BUF_SIZE    EP_BUF_SIZE(EP2_SIZE)
@@ -30,10 +35,10 @@
 
 #define EP_BUF_SIZE(x)  (x+2<64 ? x+2 : 64)
 
-extern __xdata uint8_t EP0_buffer[];
-extern __xdata uint8_t EP1_buffer[];
-extern __xdata uint8_t EP2_buffer[];
-extern __xdata uint8_t EP3_buffer[];
+__xdata __at (EP0_ADDR) uint8_t EP0_buffer[EP0_BUF_SIZE];     
+__xdata __at (EP1_ADDR) uint8_t EP1_buffer[EP1_BUF_SIZE];
+__xdata __at (EP2_ADDR) uint8_t EP2_buffer[EP2_BUF_SIZE];
+__xdata __at (EP3_ADDR) uint8_t EP3_buffer[EP3_BUF_SIZE];
 
 // ===================================================================================
 // Device and Configuration Descriptors

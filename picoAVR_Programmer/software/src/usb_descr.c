@@ -6,14 +6,6 @@
 #include "usb_descr.h"
 
 // ===================================================================================
-// Endpoint Buffers
-// ===================================================================================
-__xdata uint8_t EP0_buffer[EP0_BUF_SIZE];
-__xdata uint8_t EP1_buffer[EP1_BUF_SIZE];
-__xdata uint8_t EP2_buffer[EP2_BUF_SIZE];
-__xdata uint8_t EP3_buffer[EP3_BUF_SIZE];
-
-// ===================================================================================
 // Device Descriptor
 // ===================================================================================
 __code USB_DEV_DESCR DevDescr = {
@@ -101,7 +93,7 @@ __code USB_CFG_DESCR_ISP CfgDescr = {
   // Functional Descriptors for Interface 1
   .functional = {
     0x05,0x24,0x00,0x10,0x01,                     // header functional descriptor
-    0x05,0x24,0x01,0x00,0x00,                     // call management functional descriptor
+    0x05,0x24,0x01,0x00,0x01,                     // call management functional descriptor
     0x04,0x24,0x02,0x02,                          // direct line management functional descriptor
     0x05,0x24,0x06,0x01,0x02                      // union functional descriptor: CDC IF1, Data IF2
   },
