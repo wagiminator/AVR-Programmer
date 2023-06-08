@@ -1,5 +1,5 @@
 # picoISP Programmer for AVR MCU based on CH552E
-The CH55x-based picoISP is a simple and cheap USB-based in-system programmer (ISP) for AVR microcontrollers with voltage selection switch (5V and 3.3V) and compatible with the [USBtinyISP](https://learn.adafruit.com/usbtinyisp) or the [USBasp](https://www.fischl.de/usbasp/) depending on the firmware. The picoISP supports a wide range of AVR microcontrollers, including the ATtiny and ATmega series, and can be used with a variety of software development tools such as the Arduino IDE, Atmel Studio, and AVRDUDE.
+The CH55x-based picoISP is a simple and cheap USB-based in-system programmer (ISP) for AVR microcontrollers with voltage selection switch (5V and 3.3V) and compatible with the [USBtinyISP](https://learn.adafruit.com/usbtinyisp), the [USBasp](https://www.fischl.de/usbasp/), or the [STK500](https://ww1.microchip.com/downloads/en/AppNotes/doc2525.pdf) depending on the firmware. The picoISP supports a wide range of AVR microcontrollers, including the ATtiny and ATmega series, and can be used with a variety of software development tools such as the Arduino IDE, Atmel Studio, and AVRdude.
 
 ![picoISP_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/picoISP_Programmer/documentation/picoISP_pic1.jpg)
 
@@ -19,7 +19,10 @@ The CH552E is a low-cost, enhanced E8051 core microcontroller compatible with th
 The picoisp firmware is a port of the USBtinyISP firmware originally developed by Dick Streefland and Ladyada for ATtiny microcontrollers. This port is based on the conversion for CH55x microcontroller by DeqingSun. Since it is compatible with the original USBtinyISP, it works fine with AVRdude (avrdude -c usbtiny) and the Arduino IDE (Tools -> Programmer -> USBtinyISP).
 
 ### picoasp for USBasp Compatibility
-The picoasp firmware is a port of the USBasp firmware originally developed by Thomas Fischl for ATmega8 microcontrollers. It includes the auto-clock extension by Ralph Doncaster. Since it is compatible with the original USBasp, it works fine with AVRdude (avrdude -c usbasp) and the Arduino IDE (Tools -> Programmer -> USBasp).
+The picoasp firmware is a port of the USBasp firmware originally developed by Thomas Fischl for ATmega8 microcontrollers. It includes the auto-clock extension by Ralph Doncaster, which automatically selects the maximum programming speed. Since it is compatible with the original USBasp, it works fine with AVRdude (avrdude -c usbasp) and the Arduino IDE (Tools -> Programmer -> USBasp).
+
+### picostk for STK500 Compatibility
+The picostk firmware is an improved port of the ArduinoISP (or Arduino as ISP) firmware originally developed by Randall Bohn for the Arduino Uno. It is compatible with the STK500v1 programmer. In addition, Ralph Doncaster's auto-clock extension is included, which automatically selects the maximum programming speed. It works fine with AVRdude (avrdude -c stk500v1 or avrdude -c arduino) and the Arduino IDE (Tools -> Programmer -> Arduino as ISP). Don't forget to choose the right serial port.
 
 ## Compiling and Installing Firmware
 ### Preparing the CH55x Bootloader
@@ -67,7 +70,10 @@ Install the [Arduino IDE](https://www.arduino.cc/en/software) if you haven't alr
 - Click **Upload**.
 
 ## Installing Drivers for the picoISP
-On Linux, you don't need to install a driver. Windows users may need to install the [usbtiny driver](https://learn.adafruit.com/usbtinyisp) for the USBtinyISP version. The USBasp version includes a Windows Compatible ID (WCID) for automated driver installation. If this doesn't work, you have to install a driver manually using the Zadig tool (https://zadig.akeo.ie/). Click on "Options" -> "List all devices" and select the "USBasp". Then install the libusb-win32 driver. To do this, the device must be connected to your PC. However, functionality, especially with newer Windows versions, is not guaranteed.
+On Linux, you don't need to install a driver.
+Windows users may need to install the [usbtiny driver](https://learn.adafruit.com/usbtinyisp) for the USBtinyISP version.
+The USBasp version includes a Windows Compatible ID (WCID) for automated driver installation. If this doesn't work, you have to install a driver manually using the Zadig tool (https://zadig.akeo.ie/). Click on "Options" -> "List all devices" and select the "USBasp". Then install the libusb-win32 driver. To do this, the device must be connected to your PC. However, functionality, especially with newer Windows versions, is not guaranteed.
+The STK500 version may require a CDC driver for Windows. This can be easily installed using the Zadig tool.
 
 # Operating Instructions
 - Select the programming voltage (3.3V or 5V) with the voltage selection switch.
@@ -85,6 +91,7 @@ On Linux, you don't need to install a driver. Windows users may need to install 
 7. [Ladyada: USBtinyISP](https://learn.adafruit.com/usbtinyisp)
 8. [Thomas Fischl: USBasp](https://www.fischl.de/usbasp/)
 9. [Ralph Doncaster: USBasp](https://github.com/nerdralph/usbasp)
+10. [Randall Bohn: ArduinoISP](https://github.com/rsbohn/ArduinoISP)
 
 ![picoISP_pic4.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/picoISP_Programmer/documentation/picoISP_pic4.jpg)
 
