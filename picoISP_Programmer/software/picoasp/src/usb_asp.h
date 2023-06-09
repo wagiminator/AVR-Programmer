@@ -4,6 +4,9 @@
 
 #pragma once
 #include <stdint.h>
+#include "isp.h"
+#include "tpi.h"
+#include "usb_handler.h"
 
 // USB function call identifiers
 #define USBASP_FUNC_CONNECT           1

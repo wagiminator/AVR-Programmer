@@ -2,12 +2,7 @@
 // USBasp Functions for CH551, CH552 and CH554
 // ===================================================================================
 
-#include "isp.h"
-#include "tpi.h"
-#include "ch554.h"
-#include "config.h"
 #include "usb_asp.h"
-#include "usb_handler.h"
 
 __bit    prog_address_newmode = 0;
 uint8_t  prog_state = PROG_STATE_IDLE;
@@ -29,6 +24,9 @@ void ASP_init(void) {
   ISP_disconnect();                       // disconnect ISP/TPI bus
   USB_init();                             // setup USB
   UEP1_T_LEN = 0;
+  #ifdef PIN_LED_USB
+  PIN_low(PIN_LED_USB);                   // turn on status LED
+  #endif
 }
 
 // Setup ASP endpoints
@@ -57,7 +55,6 @@ uint8_t ASP_control(void) {
     switch(SetupReq) {
       case USBASP_FUNC_CONNECT:
         prog_address_newmode = 0;         // set compatibility mode
-        ISP_setSpeed(ISP_sck);            // set SPI clock frequency
         ISP_connect();                    // connect ISP bus
         return 0;
 
@@ -119,7 +116,6 @@ uint8_t ASP_control(void) {
         return 0;
 
       case USBASP_FUNC_SETISPSCK:
-        ISP_sck = EP0_buffer[2];
         EP0_buffer[0] = 0;
         return 1;
 

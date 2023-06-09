@@ -70,7 +70,7 @@ void USB_ISR(void) __interrupt(INT_NO_USB) {
 void main(void) {
   // Setup
   CLK_config();                             // configure system clock
-  DLY_ms(10);                               // wait for clock to settle
+  DLY_us(10000);                            // wait for clock to settle
   ISP_init();                               // init AVR ISP
 
   // Loop

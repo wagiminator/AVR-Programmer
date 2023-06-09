@@ -4,11 +4,15 @@
 
 #pragma once
 
-// Pin definitions
+// Pin definitions for ISP bus
 #define PIN_RESET           P14       // pin connected to ICSP RESET
 #define PIN_MOSI            P15       // pin connected to ICSP MOSI (do not change)
 #define PIN_MISO            P16       // pin connected to ICSP MISO (do not change)
 #define PIN_SCK             P17       // pin connected to ISCP SCK  (do not change)
+
+// Pin definitions for status LEDs (uncomment if not used)
+//#define PIN_LED_PRG                 // pin connected to PROGMODE LED (active LOW)
+//#define PIN_LED_USB                 // pin connected to USB LED (active LOW)
 
 // USB device descriptor
 #define USB_VENDOR_ID       0x1781    // VID (private use only)

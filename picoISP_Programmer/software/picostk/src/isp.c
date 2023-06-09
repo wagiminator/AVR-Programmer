@@ -10,27 +10,20 @@
 
 __bit ISP_HWSPI;                          // 0: use software SPI, 1: use hardware SPI
 
-// Connect ISP bus
-inline void ISP_connect(void) {
-  #ifdef PIN_LED
-  PIN_low(PIN_LED);                       // turn on onboard LED
-  #endif
-}
-
 // Disconnect ISP bus
 void ISP_disconnect(void) {
   P1_DIR_PU &= ~((1<<5)|(1<<6)|(1<<7));   // set all the pins to Hi-Z
   P1_MOD_OC &= ~((1<<5)|(1<<6)|(1<<7));
   PIN_input(PIN_RESET);
-  #ifdef PIN_LED
-  PIN_high(PIN_LED);                      // turn off onboard LED
-  #endif
 }
 
 // Setup ISP
 void ISP_init(void) {
   ISP_disconnect();                       // setup pins
   CDC_init();                             // setup USB-CDC
+  #ifdef PIN_LED_USB
+  PIN_low(PIN_LED_USB);                   // turn on status LED
+  #endif
 }
 
 // Transmit and receive one byte via Software SPI @ 15625Hz (should be slow enough).
@@ -59,7 +52,7 @@ uint8_t ISP_transmit(uint8_t data) {
   return ISP_SW_transmit(data);
 }
 
-// Enter programming mode with auto-clock
+// Connect ISP bus and enter programming mode with auto-clock
 // (Thanks to Ralph Doncaster)
 uint8_t ISP_enterProgrammingMode(void) {
   uint8_t check, tries;
@@ -71,7 +64,6 @@ uint8_t ISP_enterProgrammingMode(void) {
     if(SPI0_CK_SE == 255) {                   // already at slowest hardware speed?
       ISP_HWSPI = 0;                          // use software SPI now
       SPI0_CTRL = 0;                          // disable SPI interface
-      PIN_low(PIN_MOSI);                      // MOSI low
       PIN_low(PIN_SCK);                       // SCK low
     }
     SPI0_CK_SE = (SPI0_CK_SE << 1) + 1;       // slow down hw speed
@@ -213,7 +205,9 @@ void start_pmode(void) {
     return;
   }
   CDC_write(STK_INSYNC);
-  ISP_connect();
+  #ifdef PIN_LED_PRG
+  PIN_low(PIN_LED_PRG);
+  #endif
   pmode = !ISP_enterProgrammingMode();
   if(pmode) CDC_write(STK_OK);
   else {
@@ -239,7 +233,7 @@ void flash(uint8_t hilo, uint16_t addr, uint8_t data) {
 
 void commit(uint16_t addr) {
   spi_transaction(0x4C, addr >> 8, addr, 0);
-  DLY_us(5000);
+  DLY_us(4800);
 }
 
 uint16_t current_page(uint16_t addr) {
@@ -272,7 +266,7 @@ uint8_t write_eeprom(uint16_t length) {
   uint16_t x;
   for(x = 0; x < length; x++) {
     spi_transaction(0xC0, 0x00, (_addr << 1) + x, buff[x]);
-    DLY_us(5000);
+    DLY_us(9600);
   } 
   return STK_OK;
 }
@@ -358,7 +352,16 @@ void read_signature(void) {
   CDC_write(STK_OK);
 }
 
-void avrisp(void) { 
+void avrisp(void) {
+  // Set status LEDs
+  #ifdef PIN_LED_PRG
+  PIN_write(PIN_LED_PRG, !pmode);
+  #endif
+  #ifdef PIN_LED_ERR
+  PIN_write(PIN_LED_ERR, !error);
+  #endif
+
+  // Read and handle commands
   uint8_t avrch = CDC_read();
   switch(avrch) {
     case STK_GET_SYNC:                  // get in sync

@@ -3,9 +3,6 @@
 // ===================================================================================
 
 #include "tpi.h"
-#include "gpio.h"
-#include "delay.h"
-#include "config.h"
 
 __xdata uint16_t TPI_dly_cnt; 
 
@@ -26,22 +23,21 @@ __bit TPI_clockBit(__bit b) {
 void TPI_connect(void) {
   uint8_t i;
   
-  #ifdef PIN_LED
-  PIN_low(PIN_LED);                       // turn on onboard LED
+  #ifdef PIN_LED_PRG
+  PIN_low(PIN_LED_PRG);                   // turn on status LED
   #endif
-  
-  PIN_output(PIN_RESET);                  // RST to output
-  PIN_high(PIN_RESET);                    // RST high
-  DLY_us(960);                            // wait a bit
-  PIN_low(PIN_RESET);                     // RST low
-  DLY_us(5120);                           // wait a bit
 
-  PIN_low(PIN_SCK);                       // CLK low
-  PIN_output(PIN_SCK);                    // CLK to output
+  PIN_high(PIN_RESET);                    // RST high
+  PIN_output(PIN_RESET);                  // RST to output
+  DLY_us(1000);                           // wait a bit (128ms ???)
+  PIN_low(PIN_RESET);                     // RST low
   PIN_high(PIN_MOSI);                     // DATA high
   PIN_input_PU(PIN_MOSI);                 // DATA input pullup, open-drain output
+  DLY_us(5600);                           // wait a bit (2000ns ???)
+  PIN_low(PIN_SCK);                       // CLK low
+  PIN_output(PIN_SCK);                    // CLK to output
   
-  for(i=32; i; i--) TPI_clockBit(1);      // DATA high for 32 TPI clock cycles
+  for(i=32; i; i--) TPI_clockBit(1);      // DATA high for 32 TPI clock cycles (16 ???)
 }
 
 // Disconnect TPI bus
@@ -57,8 +53,8 @@ void TPI_disconnect(void) {
   DLY_us(1600);                           // wait a bit
   PIN_input(PIN_RESET);                   // RST to input
   
-  #ifdef PIN_LED
-  PIN_high(PIN_LED);                      // turn off onboard LED
+  #ifdef PIN_LED_PRG
+  PIN_high(PIN_LED_PRG);                  // turn off status LED
   #endif
 }
 

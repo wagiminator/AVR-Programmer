@@ -4,6 +4,9 @@
 
 #pragma once
 #include <stdint.h>
+#include "gpio.h"
+#include "delay.h"
+#include "config.h"
 
 // TPI instructions
 #define TPI_OP_SLD              0x20

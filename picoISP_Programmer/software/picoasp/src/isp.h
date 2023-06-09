@@ -4,6 +4,9 @@
 
 #pragma once
 #include <stdint.h>
+#include "gpio.h"
+#include "delay.h"
+#include "config.h"
 
 // ISP SCK speed identifiers
 #define USBASP_ISP_SCK_AUTO       0
@@ -21,13 +24,9 @@
 #define USBASP_ISP_SCK_1500       12    // 1.5 MHz
 #define USBASP_ISP_SCK_3000       13    //   3 MHz
 
-// Variables
-extern uint8_t ISP_sck;                 // Current ISP SCK speed
-
 // Functions
 void ISP_connect(void);                 // Connect ISP bus
 void ISP_disconnect(void);              // Disconnect ISP bus
-void ISP_setSpeed(uint8_t option);      // Set SPI SCK speed
 uint8_t ISP_transmit(uint8_t data);     // Transmit and receive one byte via ISP
 uint8_t ISP_enterProgrammingMode(void); // Enter programming mode
 static void ISP_updateExtended(uint32_t address);       // Update extended address byte
