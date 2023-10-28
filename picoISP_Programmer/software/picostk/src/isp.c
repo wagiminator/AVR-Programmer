@@ -59,7 +59,7 @@ uint8_t ISP_enterProgrammingMode(void) {
   PIN_output(PIN_RESET);                      // RESET pin to output
   ISP_HWSPI  = 1;                             // start with hardware SPI
   SPI0_CTRL  = 0x60;                          // enable SPI interface, mode 0
-  SPI0_CK_SE = 0;                             // start with fastest speed
+  SPI0_CK_SE = 3;                             // start with ~1.5MHz
   do {
     if(SPI0_CK_SE == 255) {                   // already at slowest hardware speed?
       ISP_HWSPI = 0;                          // use software SPI now
