@@ -1,6 +1,6 @@
 // ===================================================================================
 // Project:   picoSTK AVR ISP Programmer based on CH551, CH552, CH554
-// Version:   v1.0
+// Version:   v1.1
 // Year:      2023
 // Author:    Stefan Wagner
 // Github:    https://github.com/wagiminator

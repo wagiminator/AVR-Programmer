@@ -21,9 +21,6 @@ void ISP_disconnect(void) {
 void ISP_init(void) {
   ISP_disconnect();                       // setup pins
   CDC_init();                             // setup USB-CDC
-  #ifdef PIN_LED_USB
-  PIN_low(PIN_LED_USB);                   // turn on status LED
-  #endif
 }
 
 // Transmit and receive one byte via Software SPI @ 15625Hz (should be slow enough).
@@ -59,7 +56,7 @@ uint8_t ISP_enterProgrammingMode(void) {
   PIN_output(PIN_RESET);                      // RESET pin to output
   ISP_HWSPI  = 1;                             // start with hardware SPI
   SPI0_CTRL  = 0x60;                          // enable SPI interface, mode 0
-  SPI0_CK_SE = 3;                             // start with ~1.5MHz
+  SPI0_CK_SE = 4;                             // start with ~1.5MHz
   do {
     if(SPI0_CK_SE == 255) {                   // already at slowest hardware speed?
       ISP_HWSPI = 0;                          // use software SPI now
@@ -359,6 +356,9 @@ void avrisp(void) {
   #endif
   #ifdef PIN_LED_ERR
   PIN_write(PIN_LED_ERR, !error);
+  #endif
+  #ifdef PIN_LED_USB
+  PIN_write(PIN_LED_USB, !USB_ENUM_OK);
   #endif
 
   // Read and handle commands

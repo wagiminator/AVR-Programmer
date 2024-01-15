@@ -4,6 +4,10 @@
 
 #pragma once
 #include <stdint.h>
+#include "gpio.h"
+#include "delay.h"
+#include "config.h"
+#include "usb_handler.h"
 
 // Generic requests
 #define USBTINY_ECHO          0   // echo test
