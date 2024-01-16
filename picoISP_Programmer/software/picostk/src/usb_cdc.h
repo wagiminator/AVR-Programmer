@@ -1,5 +1,5 @@
 // ===================================================================================
-// Basic USB CDC Functions for CH551, CH552 and CH554                         * v1.4 *
+// Basic USB CDC Functions for CH551, CH552 and CH554                         * v1.5 *
 // ===================================================================================
 //
 // Functions available:
@@ -64,6 +64,5 @@ typedef struct _CDC_LINE_CODING_TYPE {
   uint8_t  databits;              // number of data bits (5,6,7,8 or 16)
 } CDC_LINE_CODING_TYPE, *PCDC_LINE_CODING_TYPE;
 
-extern __xdata CDC_LINE_CODING_TYPE CDC_lineCodingB;
-#define CDC_lineCoding  ((PCDC_LINE_CODING_TYPE)CDC_lineCodingB)
-#define CDC_getBAUD()   (CDC_lineCoding->baudrate)
+extern __xdata CDC_LINE_CODING_TYPE CDC_lineCoding;
+#define CDC_getBAUD()   (CDC_lineCoding.baudrate)

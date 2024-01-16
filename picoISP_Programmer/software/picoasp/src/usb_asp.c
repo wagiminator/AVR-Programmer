@@ -1,5 +1,5 @@
 // ===================================================================================
-// USBasp Functions for CH551, CH552 and CH554
+// USBasp Functions for CH551, CH552 and CH554                                * v1.1 *
 // ===================================================================================
 
 #include "usb_asp.h"
@@ -73,7 +73,6 @@ uint8_t ASP_control(void) {
         prog_address++;
       }
       if(len < EP0_SIZE) prog_state = PROG_STATE_IDLE;
-      USB_SetupLen -= len;        
       return len;
 
     case USBASP_FUNC_WRITEFLASH:
@@ -126,17 +125,16 @@ uint8_t ASP_control(void) {
     case USBASP_FUNC_TPI_READBLOCK:
       prog_address = *(uint16_t*) &EP0_buffer[2];
       prog_nbytes  = *(uint16_t*) &EP0_buffer[6];
-      prog_state = PROG_STATE_TPI_READ;
+      prog_state   = PROG_STATE_TPI_READ;
       len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
       TPI_readBlock(prog_address, EP0_buffer, len);
       prog_address += len;
-      USB_SetupLen -= len;
       return len;
 
     case USBASP_FUNC_TPI_WRITEBLOCK:
       prog_address = *(uint16_t*) &EP0_buffer[2];
       prog_nbytes  = *(uint16_t*) &EP0_buffer[6];
-      prog_state = PROG_STATE_TPI_WRITE;
+      prog_state   = PROG_STATE_TPI_WRITE;
       return 0;
 
     #ifdef WCID_VENDOR_CODE
@@ -147,8 +145,7 @@ uint8_t ASP_control(void) {
         if(USB_SetupLen > len) USB_SetupLen = len;
         len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
         USB_EP0_copyDescr(len);
-        USB_SetupLen -= len;
-        USB_pDescr   += len;
+        USB_pDescr += len;
         return len;
       }
       return 0xff;
@@ -203,7 +200,7 @@ void ASP_EP0_IN(void) {
     #endif
 
     default:
-      UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
+      UEP0_CTRL = bUEP_R_TOG | UEP_T_RES_NAK | UEP_R_RES_ACK;
       return;
   }
 }
@@ -240,7 +237,7 @@ void ASP_EP0_OUT(void) {
         }
         prog_address++;
       }
-      USB_SetupLen  -= len;
+      USB_SetupLen -= len;
       UEP0_T_LEN = (USB_SetupLen > 0) ? len : 0;
       UEP0_CTRL ^= bUEP_R_TOG;
       return;
@@ -259,8 +256,7 @@ void ASP_EP0_OUT(void) {
       return;
 
     default:
-      UEP0_T_LEN = 0;
-      UEP0_CTRL  = UEP_R_RES_ACK | UEP_T_RES_ACK;
+      UEP0_CTRL = bUEP_T_TOG | UEP_T_RES_ACK | UEP_R_RES_ACK;
       return;
   }
 }

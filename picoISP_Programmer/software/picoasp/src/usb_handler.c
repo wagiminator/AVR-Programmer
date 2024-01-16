@@ -1,5 +1,5 @@
 // ===================================================================================
-// USB Handler for CH551, CH552 and CH554                                     * v1.4 *
+// USB Handler for CH551, CH552 and CH554                                     * v1.5 *
 // ===================================================================================
 
 #include "usb_handler.h"
@@ -7,7 +7,7 @@
 // ===================================================================================
 // Variables
 // ===================================================================================
-volatile uint8_t  USB_SetupReq, USB_SetupTyp, USB_Config;
+volatile uint8_t  USB_SetupReq, USB_SetupTyp, USB_Config, USB_Addr;
 volatile uint16_t USB_SetupLen;
 volatile __bit    USB_ENUM_OK;
 __code uint8_t*   USB_pDescr;
@@ -153,18 +153,18 @@ void USB_EP0_SETUP(void) {
           if(USB_SetupLen > len) USB_SetupLen = len;    // limit length
           len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
           USB_EP0_copyDescr(len);                 // copy descriptor to EP0
-          USB_SetupLen -= len;
-          USB_pDescr   += len;
+          USB_pDescr += len;
         }
         break;
 
       case USB_SET_ADDRESS:
-        USB_SetupLen = USB_SetupBuf->wValueL;     // save the assigned address
+        USB_Addr = USB_SetupBuf->wValueL;        // save the assigned address
         break;
 
       case USB_GET_CONFIGURATION:
         EP0_buffer[0] = USB_Config;
-        if(USB_SetupLen >= 1) len = 1;
+        if(USB_SetupLen > 1) USB_SetupLen = 1;
+        len = USB_SetupLen;
         break;
 
       case USB_SET_CONFIGURATION:
@@ -181,8 +181,8 @@ void USB_EP0_SETUP(void) {
       case USB_GET_STATUS:
         EP0_buffer[0] = 0x00;
         EP0_buffer[1] = 0x00;
-        if(USB_SetupLen >= 2) len = 2;
-        else len = USB_SetupLen;
+        if(USB_SetupLen > 2) USB_SetupLen = 2;
+        len = USB_SetupLen;
         break;
 
       case USB_CLEAR_FEATURE:
@@ -330,8 +330,9 @@ void USB_EP0_SETUP(void) {
     UEP0_CTRL  = bUEP_R_TOG | bUEP_T_TOG | UEP_R_RES_STALL | UEP_T_RES_STALL; // STALL
   }
   else {                                    // transmit data to host or send 0-length packet
-    UEP0_T_LEN = len;
-    UEP0_CTRL  = bUEP_R_TOG | bUEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_ACK; // Expect DATA1, Answer ACK
+    USB_SetupLen -= len;
+    UEP0_T_LEN    = len;
+    UEP0_CTRL     = bUEP_R_TOG | bUEP_T_TOG | UEP_R_RES_ACK | UEP_T_RES_ACK;
   }
 }
 
@@ -357,19 +358,19 @@ void USB_EP0_IN(void) {
     case USB_GET_DESCRIPTOR:
       len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
       USB_EP0_copyDescr(len);                     // copy descriptor to EP0                                
-      USB_SetupLen -= len;
       USB_pDescr   += len;
+      USB_SetupLen -= len;
       UEP0_T_LEN    = len;
       UEP0_CTRL    ^= bUEP_T_TOG;                 // switch between DATA0 and DATA1
       break;
 
     case USB_SET_ADDRESS:
-      USB_DEV_AD = USB_DEV_AD & bUDA_GP_BIT | USB_SetupLen;
-      UEP0_CTRL  = UEP_R_RES_ACK | UEP_T_RES_NAK;
+      USB_DEV_AD = USB_DEV_AD & bUDA_GP_BIT | USB_Addr;
+      UEP0_CTRL  = bUEP_R_TOG | UEP_T_RES_NAK | UEP_R_RES_ACK;
       break;
 
     default:
-      UEP0_CTRL  = UEP_R_RES_ACK | UEP_T_RES_NAK;
+      UEP0_CTRL  = bUEP_R_TOG | UEP_T_RES_NAK | UEP_R_RES_ACK;
       break;
   }
 }
@@ -390,8 +391,7 @@ void USB_EP0_OUT(void) {
   }
   #endif
 
-  UEP0_T_LEN = 0;
-  UEP0_CTRL  = UEP_R_RES_ACK | UEP_T_RES_ACK;
+  UEP0_CTRL  = bUEP_T_TOG | UEP_T_RES_ACK | UEP_R_RES_ACK;
 }
 
 // ===================================================================================

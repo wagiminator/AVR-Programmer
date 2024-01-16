@@ -1,5 +1,5 @@
 // ===================================================================================
-// Basic USB CDC Functions for CH551, CH552 and CH554                         * v1.4 *
+// Basic USB CDC Functions for CH551, CH552 and CH554                         * v1.5 *
 // ===================================================================================
 
 #include "usb_cdc.h"
@@ -9,7 +9,7 @@
 // ===================================================================================
 
 // Initialize line coding
-__xdata CDC_LINE_CODING_TYPE CDC_lineCodingB = {
+__xdata CDC_LINE_CODING_TYPE CDC_lineCoding = {
   .baudrate = 115200,       // baudrate 115200
   .stopbits = 0,            // 1 stopbit
   .parity   = 0,            // no parity
@@ -100,9 +100,9 @@ uint8_t CDC_control(void) {
   uint8_t i;
   switch(USB_SetupReq) {
     case GET_LINE_CODING:                         // 0x21  currently configured
-      for(i=0; i<sizeof(CDC_lineCodingB); i++)
-        EP0_buffer[i] = ((uint8_t*)&CDC_lineCodingB)[i]; // transmit line coding to host
-      return sizeof(CDC_lineCodingB);
+      for(i=0; i<sizeof(CDC_lineCoding); i++)
+        EP0_buffer[i] = ((uint8_t*)&CDC_lineCoding)[i]; // transmit line coding to host
+      return sizeof(CDC_lineCoding);
     case SET_CONTROL_LINE_STATE:                  // 0x22  generates RS-232/V.24 style control signals
       CDC_controlLineState = EP0_buffer[2];       // read control line state
       return 0;
@@ -117,17 +117,10 @@ uint8_t CDC_control(void) {
 void CDC_EP0_OUT(void) {
   uint8_t i;
   if(USB_SetupReq == SET_LINE_CODING) {           // set line coding
-    if(U_TOG_OK) {
-      for(i=0; i<((sizeof(CDC_lineCodingB)<=USB_RX_LEN)?sizeof(CDC_lineCodingB):USB_RX_LEN); i++)
-        ((uint8_t*)&CDC_lineCodingB)[i] = EP0_buffer[i];          // receive line coding from host
-      UEP0_T_LEN = 0;                                             // send 0-length packet
-      UEP0_CTRL  = (UEP0_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK; // -> respond ACK
-    }
+    for(i=0; i<((sizeof(CDC_lineCoding)<=USB_RX_LEN)?sizeof(CDC_lineCoding):USB_RX_LEN); i++)
+      ((uint8_t*)&CDC_lineCoding)[i] = EP0_buffer[i];      // receive line coding from host
   }
-  else {
-    UEP0_T_LEN = 0;
-    UEP0_CTRL  = UEP_R_RES_ACK | UEP_T_RES_ACK;
-  }
+  UEP0_CTRL = bUEP_T_TOG | UEP_T_RES_ACK | UEP_R_RES_ACK;
 }
 
 // Endpoint 1 IN handler

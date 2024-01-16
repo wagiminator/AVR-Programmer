@@ -1,5 +1,5 @@
 // ===================================================================================
-// USBtinyISP Functions for CH551, CH552 and CH554
+// USBtinyISP Functions for CH551, CH552 and CH554                            * v1.1 *
 // ===================================================================================
 
 #include "usb_isp.h"
@@ -188,7 +188,6 @@ uint8_t ISP_control(void) {
         ISP_spi_rw();
         EP0_buffer[i] = res[3];
       }
-      USB_SetupLen -= len;
       return len;
 
     case USBTINY_FLASH_WRITE:
@@ -197,8 +196,7 @@ uint8_t ISP_control(void) {
       timeout = *(uint16_t*) &EP0_buffer[2];
       if(USB_SetupReq == USBTINY_FLASH_WRITE) cmd0 = 0x40;
       else cmd0 = 0xc0;
-      len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
-      return len;
+      return 0;
 
     default:
       return 0xFF;
@@ -221,12 +219,12 @@ void ISP_EP0_IN(void) {
         ISP_spi_rw();
         EP0_buffer[i] = res[3];
       }
-      USB_SetupLen  -= len;
+      USB_SetupLen -= len;
       UEP0_T_LEN = len;
       UEP0_CTRL ^= bUEP_T_TOG;
       break;
     default:
-      UEP0_CTRL  = UEP_R_RES_ACK | UEP_T_RES_NAK;
+      UEP0_CTRL = bUEP_R_TOG | UEP_T_RES_NAK | UEP_R_RES_ACK;
       break;
   }
 }
@@ -239,7 +237,7 @@ void ISP_EP0_OUT(void) {
   switch(USB_SetupReq) {
       case USBTINY_FLASH_WRITE:
       case USBTINY_EEPROM_WRITE:
-        len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
+        len = USB_RX_LEN;
         for(i=0; i<len; i++) {
           cmd[3] = EP0_buffer[i];
           ISP_spi_rw();
@@ -252,14 +250,12 @@ void ISP_EP0_OUT(void) {
           }
         }
         USB_SetupLen -= len;
-        UEP0_T_LEN = (USB_SetupLen > 0) ? len : 0;
         UEP0_CTRL ^= bUEP_R_TOG;
         break;
       default:
-        UEP0_T_LEN = 0;
-        UEP0_CTRL  = UEP_R_RES_ACK | UEP_T_RES_ACK;
+        UEP0_CTRL = bUEP_T_TOG | UEP_T_RES_ACK | UEP_R_RES_ACK;
         break;
-    }
+  }
 }
 
 // Endpoint 1 IN handler
