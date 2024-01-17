@@ -69,8 +69,10 @@ void USB_EP0_copyDescr(uint8_t len) {
     clr  a                      ; acc <- #0
     movc a, @a+dptr             ; acc <- *USB_pDescr[dptr0]
     inc  dptr                   ; inc dptr0
-    .DB  0xA5                   ; acc -> EP0_buffer[dptr1] & inc dptr1
+    .db  0xA5                   ; acc -> EP0_buffer[dptr1] & inc dptr1
     djnz r7, 01$                ; repeat len times
+    mov  _USB_pDescr, dpl       ; USB_pDescr += len
+    mov  (_USB_pDescr + 1), dph
     pop  ar7                    ; r7  <- stack
     pop  acc                    ; acc <- stack
   __endasm;
@@ -153,7 +155,6 @@ void USB_EP0_SETUP(void) {
           if(USB_SetupLen > len) USB_SetupLen = len;    // limit length
           len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
           USB_EP0_copyDescr(len);                 // copy descriptor to EP0
-          USB_pDescr += len;
         }
         break;
 
@@ -358,7 +359,6 @@ void USB_EP0_IN(void) {
     case USB_GET_DESCRIPTOR:
       len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
       USB_EP0_copyDescr(len);                     // copy descriptor to EP0                                
-      USB_pDescr   += len;
       USB_SetupLen -= len;
       UEP0_T_LEN    = len;
       UEP0_CTRL    ^= bUEP_T_TOG;                 // switch between DATA0 and DATA1

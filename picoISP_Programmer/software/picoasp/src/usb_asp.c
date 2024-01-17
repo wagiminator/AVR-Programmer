@@ -145,7 +145,6 @@ uint8_t ASP_control(void) {
         if(USB_SetupLen > len) USB_SetupLen = len;
         len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
         USB_EP0_copyDescr(len);
-        USB_pDescr += len;
         return len;
       }
       return 0xff;
@@ -193,7 +192,6 @@ void ASP_EP0_IN(void) {
       len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
       USB_EP0_copyDescr(len);                             
       USB_SetupLen -= len;
-      USB_pDescr   += len;
       UEP0_T_LEN    = len;
       UEP0_CTRL    ^= bUEP_T_TOG;
       break;
