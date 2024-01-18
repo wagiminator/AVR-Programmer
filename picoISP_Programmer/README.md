@@ -79,9 +79,9 @@ The STK500 version may require a CDC driver for Windows. This can be easily inst
 
 # Operating Instructions
 - Select the programming voltage (3.3V or 5V) with the voltage selection switch.
-- Plug the picoISP into a USB port on your PC, it should be identified as a USBtinyISP, USBasp, or CDC device.
+- Plug the picoISP into a USB port on your PC, it should be identified as a USBtinyISP, USBasp, or CDC device (depending on the firmware).
 - Connect the picoISP to the target board via the 6-pin ICSP connector.  
-- The picoISP should work with any IDE or programming software that supports the USBtinyISP or USBasp programmer.
+- The picoISP should work with any IDE or programming software that supports the USBtinyISP, USBasp, or STK500 programmer.
 
 # References, Links and Notes
 1. [EasyEDA Design Files](https://oshwlab.com/wagiminator/ch552-picoisp-programmer)
