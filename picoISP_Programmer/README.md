@@ -16,7 +16,7 @@ The CH552E is a low-cost, enhanced E8051 core microcontroller compatible with th
 # Software
 ## Firmware Versions
 ### picoisp for USBtinyISP Compatibility
-The picoisp firmware is a port of the USBtinyISP firmware originally developed by Dick Streefland and Ladyada for ATtiny microcontrollers. This port is based on the conversion for CH55x microcontroller by DeqingSun. Since it is compatible with the original USBtinyISP, it works fine with AVRdude (avrdude -c usbtiny) and the Arduino IDE (Tools -> Programmer -> USBtinyISP).
+The picoisp firmware is a port of the USBtinyISP firmware originally developed by Dick Streefland and Ladyada for ATtiny microcontrollers. This port is based on the conversion for CH55x microcontroller by DeqingSun. It includes the auto-clock extension by Ralph Doncaster, which automatically selects the maximum programming speed. Since it is compatible with the original USBtinyISP, it works fine with AVRdude (avrdude -c usbtiny) and the Arduino IDE (Tools -> Programmer -> USBtinyISP).
 
 ### picoasp for USBasp Compatibility
 The picoasp firmware is a port of the USBasp firmware originally developed by Thomas Fischl for ATmega8 microcontrollers. It includes the auto-clock extension by Ralph Doncaster, which automatically selects the maximum programming speed. Since it is compatible with the original USBasp, it works fine with AVRdude (avrdude -c usbasp) and the Arduino IDE (Tools -> Programmer -> USBasp).
@@ -49,6 +49,7 @@ sudo pip install pyusb
 ```
 
 #### Compiling and Uploading Firmware
+- Adjust the firmware parameters in src/config.h if necessary.
 - Open a terminal.
 - Navigate to the folder with the makefile. 
 - Connect the board and make sure the CH55x is in bootloader mode. 
@@ -71,8 +72,9 @@ Install the [Arduino IDE](https://www.arduino.cc/en/software) if you haven't alr
 
 ## Installing Drivers for the picoISP
 On Linux, you don't need to install a driver.
-Windows users may need to install the [usbtiny driver](https://learn.adafruit.com/usbtinyisp) for the USBtinyISP version.
-The USBasp version includes a Windows Compatible ID (WCID) for automated driver installation. If this doesn't work, you have to install a driver manually using the Zadig tool (https://zadig.akeo.ie/). Click on "Options" -> "List all devices" and select the "USBasp". Then install the libusb-win32 driver. To do this, the device must be connected to your PC. However, functionality, especially with newer Windows versions, is not guaranteed.
+
+The USBtinyISP and the USBasp version include a Windows Compatible ID (WCID) for automated driver installation on Windows. If this doesn't work, you have to install a driver manually using the Zadig tool (https://zadig.akeo.ie/). Click on "Options" -> "List all devices" and select the "USBtinyISP" or "USBasp". Then install the libusb-win32 driver. To do this, the device must be connected to your PC. You can also install the [usbtiny driver](https://learn.adafruit.com/usbtinyisp) for the USBtinyISP version. However, functionality, especially with newer Windows versions, is not guaranteed.
+
 The STK500 version may require a CDC driver for Windows. This can be easily installed using the Zadig tool.
 
 # Operating Instructions

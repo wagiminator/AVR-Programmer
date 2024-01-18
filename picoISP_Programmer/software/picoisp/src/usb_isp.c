@@ -134,14 +134,15 @@ void ISP_EP_init(void) {
 }
 
 // ===================================================================================
-// ISP-Specific USB Vendor Control Transfers
+// ISP-Specific USB Control Transfers
 // ===================================================================================
 
-// Handle non-standard control requests
+// Handle VENDOR SETUP requests
 uint8_t ISP_control(void) {
   uint8_t len, i;
 
   switch(USB_SetupReq) {
+
     case USBTINY_ECHO:
       return 8;                         // just send it back
 
@@ -198,46 +199,73 @@ uint8_t ISP_control(void) {
       else cmd0 = 0xc0;
       return 0;
 
+    #ifdef WCID_VENDOR_CODE
+    case WCID_VENDOR_CODE:
+      if(USB_SetupBuf->wIndexL == 0x04) {
+        USB_pDescr = WCID_FEATURE_DESCR;
+        len = WCID_FEATURE_DESCR[0];
+        if(USB_SetupLen > len) USB_SetupLen = len;
+        len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
+        USB_EP0_copyDescr(len);
+        return len;
+      }
+      return 0;
+    #endif
+
     default:
       return 0xFF;
   }
 }
 
 // ===================================================================================
-// ISP-Specific USB Vendor Endpoint Handlers
+// ISP-Specific USB IN Transfers
 // ===================================================================================
 
-// Endpoint 0 IN handler
+// Endpoint 0 VENDOR IN handler
 void ISP_EP0_IN(void) {
   uint8_t len, i;
+  len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
 
   switch(USB_SetupReq) {
+
     case USBTINY_FLASH_READ:
     case USBTINY_EEPROM_READ:
-      len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
       for(i=0; i<len; i++) {
         ISP_spi_rw();
         EP0_buffer[i] = res[3];
       }
-      USB_SetupLen -= len;
-      UEP0_T_LEN = len;
-      UEP0_CTRL ^= bUEP_T_TOG;
       break;
+
+    #ifdef WCID_VENDOR_CODE
+    case WCID_VENDOR_CODE:
+      USB_EP0_copyDescr(len);                             
+      break;
+    #endif
+
     default:
       UEP0_CTRL = bUEP_R_TOG | UEP_T_RES_NAK | UEP_R_RES_ACK;
-      break;
+      return;
   }
+
+  USB_SetupLen -= len;
+  UEP0_T_LEN    = len;
+  UEP0_CTRL    ^= bUEP_T_TOG;
 }
 
-// Endpoint 0 OUT handler
+// ===================================================================================
+// ISP-Specific USB OUT Transfers
+// ===================================================================================
+
+// Endpoint 0 VENDOR OUT handler
 void ISP_EP0_OUT(void) {
   uint8_t len, i, r;
   uint16_t usec;
 
   switch(USB_SetupReq) {
+
       case USBTINY_FLASH_WRITE:
       case USBTINY_EEPROM_WRITE:
-        len = USB_RX_LEN;
+        len = USB_SetupLen >= USB_RX_LEN ? USB_RX_LEN : USB_SetupLen;
         for(i=0; i<len; i++) {
           cmd[3] = EP0_buffer[i];
           ISP_spi_rw();
@@ -250,13 +278,11 @@ void ISP_EP0_OUT(void) {
           }
         }
         USB_SetupLen -= len;
-        UEP0_CTRL ^= bUEP_R_TOG;
-        break;
+        UEP0_CTRL    ^= bUEP_R_TOG;
+        return;
+
       default:
         UEP0_CTRL = bUEP_T_TOG | UEP_T_RES_ACK | UEP_R_RES_ACK;
-        break;
+        return;
   }
 }
-
-// Endpoint 1 IN handler
-// No handling is actually necessary here, the auto-NAK is sufficient.

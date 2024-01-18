@@ -10,9 +10,9 @@
 #define PIN_MISO            P16       // pin connected to ICSP MISO (do not change)
 #define PIN_SCK             P17       // pin connected to ISCP SCK  (do not change)
 
-// Pin definitions for status LEDs (uncomment if not used)
-//#define PIN_LED_PRG                 // pin connected to PROGMODE LED (active LOW)
-//#define PIN_LED_USB                 // pin connected to USB LED (active LOW)
+// Pin definitions for status LEDs (uncomment and define if used)
+//#define PIN_LED_PRG       P33       // pin connected to PROGMODE LED (active LOW)
+//#define PIN_LED_USB       P34       // pin connected to USB LED (active LOW)
 
 // USB device descriptor
 #define USB_VENDOR_ID       0x1781    // VID (private use only)
@@ -27,3 +27,7 @@
 #define PRODUCT_STR         'U','S','B','t','i','n','y','I','S','P'
 #define SERIAL_STR          'p','i','c','o','I','S','P'
 #define INTERFACE_STR       'T','i','n','y','S','P','I'
+
+// Windows Compatible ID (WCID) code for automated driver installation.
+// Uncomment this define to enable experimental WCID feature.
+#define WCID_VENDOR_CODE    0x5D

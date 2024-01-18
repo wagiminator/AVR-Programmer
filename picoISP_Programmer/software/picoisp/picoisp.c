@@ -1,6 +1,6 @@
 // ===================================================================================
 // Project:   picoISP AVR ISP Programmer based on CH551, CH552, CH554
-// Version:   v1.6
+// Version:   v1.7
 // Year:      2023
 // Author:    Stefan Wagner
 // Github:    https://github.com/wagiminator
@@ -13,8 +13,8 @@
 // The CH55x-based picoISP is an ISP programmer for AVR microcontrollers compatible 
 // with the USBtinyISP. It works fine with AVRdude (avrdude -c usbtiny) and the 
 // Arduino IDE (Tools -> Programmer -> USBtinyISP). The firmware is based on 
-// Dick Streefland's and ladyada's original implementation and DeqingSun's CH55x 
-// conversion.
+// Dick Streefland's and ladyada's original implementation, DeqingSun's CH55x 
+// conversion, and Ralph Doncaster's auto-clock extension..
 //
 // References:
 // -----------
@@ -44,8 +44,10 @@
 // USBtinyISP. Connect the picoISP to the target board via the 6-pin ICSP connector.
 // The picoISP should work with any IDE or programming software that supports the
 // USBtinyISP programmer.
-// Windows users may need to install a driver manually using the adafruit driver 
-// (https://learn.adafruit.com/usbtinyisp) or the Zadig tool (https://zadig.akeo.ie/).
+// The implementation includes Windows Compatible ID (WCID) code for automated driver 
+// installation. If this doesn't work, Windows users may need to install a driver 
+// manually using the adafruit driver (https://learn.adafruit.com/usbtinyisp) or the 
+// Zadig tool (https://zadig.akeo.ie/).
 // However, functionality, especially with newer Windows versions, is not guaranteed.
 
 
