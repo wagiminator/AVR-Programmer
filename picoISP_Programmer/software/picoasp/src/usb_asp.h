@@ -1,5 +1,5 @@
 // ===================================================================================
-// USBasp Functions for CH551, CH552 and CH554                                ' v1.1 *
+// USBasp Functions for CH551, CH552 and CH554                                * v1.2 *
 // ===================================================================================
 
 #pragma once
@@ -29,15 +29,6 @@
 
 // USBASP capabilities
 #define USBASP_CAP_0_TPI              0x01
-
-// Programming state
-#define PROG_STATE_IDLE               0
-#define PROG_STATE_WRITEFLASH         1
-#define PROG_STATE_READFLASH          2
-#define PROG_STATE_READEEPROM         3
-#define PROG_STATE_WRITEEEPROM        4
-#define PROG_STATE_TPI_READ           5
-#define PROG_STATE_TPI_WRITE          6
 
 // Block mode flags
 #define PROG_BLOCKFLAG_FIRST          1

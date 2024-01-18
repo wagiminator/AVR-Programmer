@@ -1,16 +1,14 @@
 // ===================================================================================
-// USBasp Functions for CH551, CH552 and CH554                                * v1.1 *
+// USBasp Functions for CH551, CH552 and CH554                                * v1.2 *
 // ===================================================================================
 
 #include "usb_asp.h"
 
-__bit    prog_address_newmode = 0;
-uint8_t  prog_state = PROG_STATE_IDLE;
-uint8_t  prog_blockflags;
-uint8_t  prog_pagecounter;
-uint32_t prog_address;
-uint16_t prog_nbytes = 0;
-uint16_t prog_pagesize;
+static __bit    prog_address_newmode = 0;
+static uint8_t  prog_blockflags;
+static uint8_t  prog_pagecounter;
+static uint32_t prog_address;
+static uint16_t prog_pagesize;
 
 // ===================================================================================
 // ASP-Specific USB Handler Functions
@@ -38,8 +36,10 @@ void ASP_EP_init(void) {
 // Handle VENDOR SETUP requests
 uint8_t ASP_control(void) {
   uint8_t len, i;
+  len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
   
   switch(USB_SetupReq) {
+
     case USBASP_FUNC_CONNECT:
       prog_address_newmode = 0;         // set compatibility mode
       ISP_connect();                    // connect ISP bus
@@ -58,42 +58,26 @@ uint8_t ASP_control(void) {
       return 4;
 
     case USBASP_FUNC_READFLASH:
+      if(!prog_address_newmode) prog_address = *(uint16_t*) &EP0_buffer[2];  
+      for(i=0; i<len; i++) EP0_buffer[i] = ISP_readFlash(prog_address++);
+      return len;
+
     case USBASP_FUNC_READEEPROM:
-      if(!prog_address_newmode)
-        prog_address = *(uint16_t*) &EP0_buffer[2];
-      prog_nbytes    = *(uint16_t*) &EP0_buffer[6];
-      if(USB_SetupReq == USBASP_FUNC_READFLASH)
-           prog_state = PROG_STATE_READFLASH;
-      else prog_state = PROG_STATE_READEEPROM;        
-      len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
-      for(i=0; i<len; i++) {
-        if(prog_state == PROG_STATE_READFLASH)
-             EP0_buffer[i] = ISP_readFlash(prog_address);
-        else EP0_buffer[i] = ISP_readEEPROM(prog_address);
-        prog_address++;
-      }
-      if(len < EP0_SIZE) prog_state = PROG_STATE_IDLE;
+      if(!prog_address_newmode) prog_address = *(uint16_t*) &EP0_buffer[2];      
+      for(i=0; i<len; i++) EP0_buffer[i] = ISP_readEEPROM(prog_address++);
       return len;
 
     case USBASP_FUNC_WRITEFLASH:
-    case USBASP_FUNC_WRITEEEPROM:
-      if(!prog_address_newmode)
-        prog_address = *(uint16_t*) &EP0_buffer[2];
-      prog_nbytes    = *(uint16_t*) &EP0_buffer[6];
+      if(!prog_address_newmode) prog_address = *(uint16_t*) &EP0_buffer[2];
+      prog_pagesize   = EP0_buffer[4];
+      prog_blockflags = EP0_buffer[5] & 0x0F;
+      prog_pagesize  += (((uint16_t)EP0_buffer[5] & 0xF0) << 4);
+      if(prog_blockflags & PROG_BLOCKFLAG_FIRST)
+        prog_pagecounter = prog_pagesize;
+      return 0;
 
-      if(USB_SetupReq == USBASP_FUNC_WRITEFLASH) {
-        prog_pagesize   = EP0_buffer[4];
-        prog_blockflags = EP0_buffer[5] & 0x0F;
-        prog_pagesize  += (((uint16_t)EP0_buffer[5] & 0xF0) << 4);
-        if(prog_blockflags & PROG_BLOCKFLAG_FIRST)
-          prog_pagecounter = prog_pagesize;
-        prog_state = PROG_STATE_WRITEFLASH;
-      }
-      else {
-        prog_pagesize   = 0;
-        prog_blockflags = 0;
-        prog_state = PROG_STATE_WRITEEEPROM;
-      }
+    case USBASP_FUNC_WRITEEEPROM:
+      if(!prog_address_newmode) prog_address = *(uint16_t*) &EP0_buffer[2];
       return 0;
 
     case USBASP_FUNC_SETLONGADDRESS:
@@ -124,18 +108,17 @@ uint8_t ASP_control(void) {
 
     case USBASP_FUNC_TPI_READBLOCK:
       prog_address = *(uint16_t*) &EP0_buffer[2];
-      prog_nbytes  = *(uint16_t*) &EP0_buffer[6];
-      prog_state   = PROG_STATE_TPI_READ;
-      len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
       TPI_readBlock(prog_address, EP0_buffer, len);
       prog_address += len;
       return len;
 
     case USBASP_FUNC_TPI_WRITEBLOCK:
       prog_address = *(uint16_t*) &EP0_buffer[2];
-      prog_nbytes  = *(uint16_t*) &EP0_buffer[6];
-      prog_state   = PROG_STATE_TPI_WRITE;
       return 0;
+
+    case USBASP_FUNC_GETCAPABILITIES:
+      *(uint32_t*) &EP0_buffer[0] = (uint32_t)USBASP_CAP_0_TPI;
+      return 4;
 
     #ifdef WCID_VENDOR_CODE
     case WCID_VENDOR_CODE:
@@ -147,7 +130,7 @@ uint8_t ASP_control(void) {
         USB_EP0_copyDescr(len);
         return len;
       }
-      return 0xff;
+      return 0;
     #endif
 
     default:
@@ -156,44 +139,32 @@ uint8_t ASP_control(void) {
 }
 
 // ===================================================================================
-// ASP-Specific USB Endpoint Handlers
+// ASP-Specific USB IN Transfers
 // ===================================================================================
 
 // Endpoint 0 VENDOR IN handler
 void ASP_EP0_IN(void) {
   uint8_t len, i;
   len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
-  switch(prog_state) {
-    case PROG_STATE_READFLASH:
-    case PROG_STATE_READEEPROM:
-      for(i=0; i<len; i++) {
-        if(prog_state == PROG_STATE_READFLASH)
-             EP0_buffer[i] = ISP_readFlash(prog_address);
-        else EP0_buffer[i] = ISP_readEEPROM(prog_address);
-        prog_address++;
-      }
-      if(len < EP0_SIZE) prog_state = PROG_STATE_IDLE;
-      USB_SetupLen -= len;
-      UEP0_T_LEN    = len;
-      UEP0_CTRL    ^= bUEP_T_TOG;
-      return;
 
-    case PROG_STATE_TPI_READ:
+  switch(USB_SetupReq) {
+
+    case USBASP_FUNC_READFLASH:
+      for(i=0; i<len; i++) EP0_buffer[i] = ISP_readFlash(prog_address++);
+      break;
+
+    case USBASP_FUNC_READEEPROM:
+      for(i=0; i<len; i++) EP0_buffer[i] = ISP_readEEPROM(prog_address++);
+      break;
+
+    case USBASP_FUNC_TPI_READBLOCK:
       TPI_readBlock(prog_address, EP0_buffer, len);
-      if(len < EP0_SIZE) prog_state = PROG_STATE_IDLE;
       prog_address += len;
-      USB_SetupLen -= len;
-      UEP0_T_LEN    = len;
-      UEP0_CTRL    ^= bUEP_T_TOG;
-      return;
+      break;
 
     #ifdef WCID_VENDOR_CODE
     case WCID_VENDOR_CODE:
-      len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
       USB_EP0_copyDescr(len);                             
-      USB_SetupLen -= len;
-      UEP0_T_LEN    = len;
-      UEP0_CTRL    ^= bUEP_T_TOG;
       break;
     #endif
 
@@ -201,55 +172,53 @@ void ASP_EP0_IN(void) {
       UEP0_CTRL = bUEP_R_TOG | UEP_T_RES_NAK | UEP_R_RES_ACK;
       return;
   }
+
+  USB_SetupLen -= len;
+  UEP0_T_LEN    = len;
+  UEP0_CTRL    ^= bUEP_T_TOG;
 }
+
+// ===================================================================================
+// ASP-Specific USB OUT Transfers
+// ===================================================================================
 
 // Endpoint 0 VENDOR OUT handler
 void ASP_EP0_OUT(void) {
   uint8_t len, i;
-  len = USB_SetupLen >= EP0_SIZE ? EP0_SIZE : USB_SetupLen;
-  switch(prog_state) {
-    case PROG_STATE_WRITEFLASH:
-    case PROG_STATE_WRITEEEPROM:
-      for(i=0; i<len; i++) {
-        if(prog_state == PROG_STATE_WRITEFLASH) {
-          if(prog_pagesize == 0)
-            ISP_writeFlash(prog_address, EP0_buffer[i], 1);
-          else {
-            ISP_writeFlash(prog_address, EP0_buffer[i], 0);
-            prog_pagecounter--;
-            if(prog_pagecounter == 0) {
-              ISP_flushPage(prog_address, EP0_buffer[i]);
-              prog_pagecounter = prog_pagesize;
-            }
-          }
-        }
-        else ISP_writeEEPROM(prog_address, EP0_buffer[i]);
+  len = USB_SetupLen >= USB_RX_LEN ? USB_RX_LEN : USB_SetupLen;
 
-        prog_nbytes--;
-        if(prog_nbytes == 0) {
-          prog_state = PROG_STATE_IDLE;
-          if((prog_blockflags & PROG_BLOCKFLAG_LAST) && (prog_pagecounter != prog_pagesize))
+  switch(USB_SetupReq) {
+
+    case USBASP_FUNC_WRITEFLASH:
+      for(i=0; i<len; i++) {
+        if(prog_pagesize == 0) ISP_writeFlash(prog_address, EP0_buffer[i], 1);
+        else {
+          ISP_writeFlash(prog_address, EP0_buffer[i], 0);
+          if(--prog_pagecounter == 0) {
             ISP_flushPage(prog_address, EP0_buffer[i]);
-          USB_SetupLen = len;
-          break;
+            prog_pagecounter = prog_pagesize;
+          }
         }
         prog_address++;
       }
       USB_SetupLen -= len;
-      UEP0_T_LEN = (USB_SetupLen > 0) ? len : 0;
+      if(USB_SetupLen == 0) {
+        if((prog_blockflags & PROG_BLOCKFLAG_LAST) && (prog_pagecounter != prog_pagesize))
+          ISP_flushPage(prog_address, EP0_buffer[i]);
+      }
       UEP0_CTRL ^= bUEP_R_TOG;
       return;
 
-    case PROG_STATE_TPI_WRITE:
+    case USBASP_FUNC_WRITEEEPROM:
+      for(i=0; i<len; i++) ISP_writeEEPROM(prog_address++, EP0_buffer[i]);
+      USB_SetupLen -= len;
+      UEP0_CTRL ^= bUEP_R_TOG;
+      return;
+
+    case USBASP_FUNC_TPI_WRITEBLOCK:
       TPI_writeBlock(prog_address, EP0_buffer, len);
       prog_address += len;
-      prog_nbytes  -= len;
-      if(prog_nbytes <= 0) {
-        prog_state = PROG_STATE_IDLE;
-        USB_SetupLen = len;
-      }
       USB_SetupLen -= len;
-      UEP0_T_LEN = (USB_SetupLen > 0) ? len : 0;
       UEP0_CTRL ^= bUEP_R_TOG;
       return;
 
@@ -258,6 +227,3 @@ void ASP_EP0_OUT(void) {
       return;
   }
 }
-
-// Endpoint 1 IN handler
-// No handling is actually necessary here, the auto-NAK is sufficient.

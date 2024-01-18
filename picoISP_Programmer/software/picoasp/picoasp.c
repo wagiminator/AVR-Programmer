@@ -9,7 +9,7 @@
 // ===================================================================================
 //
 // !!! This firmware version is experimental and still in development !!!
-// ToDo: fix broken pipes; make TPI work
+// ToDo: make TPI work
 //
 // Description:
 // ------------
