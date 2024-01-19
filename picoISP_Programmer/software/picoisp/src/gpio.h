@@ -1,5 +1,5 @@
 // ===================================================================================
-// Basic GPIO, PWM and ADC Functions for CH551, CH552 and CH554               * v1.4 *
+// Basic GPIO, PWM and ADC Functions for CH551, CH552 and CH554               * v1.5 *
 // ===================================================================================
 //
 // Pins must be defined as P10, P11, P12, etc. - e.g.:
@@ -107,6 +107,9 @@ SBIT(PP37, 0xB0, 7);
   ((PIN>=P30)&&(PIN<=P37) ? (P3_DIR_PU &= ~(1<<(PIN&7)), P3_MOD_OC &= ~(1<<(PIN&7))) : \
 (0)))
 
+#define PIN_input_HI    PIN_input
+#define PIN_input_FL    PIN_input
+
 // ===================================================================================
 // Set pin as INPUT with internal PULLUP resistor (also open-drain output,
 // when output changes from LOW to HIGH, it will drive HIGH for 2 clock cycles)
@@ -123,6 +126,8 @@ SBIT(PP37, 0xB0, 7);
   ((PIN>=P10)&&(PIN<=P17) ? (P1_MOD_OC &= ~(1<<(PIN&7)), P1_DIR_PU |= (1<<(PIN&7))) : \
   ((PIN>=P30)&&(PIN<=P37) ? (P3_MOD_OC &= ~(1<<(PIN&7)), P3_DIR_PU |= (1<<(PIN&7))) : \
 (0)))
+
+#define PIN_output_PP   PIN_output
 
 // ===================================================================================
 // Set pin as OPEN-DRAIN OUTPUT (also high-impedance input, no pullup)
