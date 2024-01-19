@@ -90,7 +90,7 @@ uint8_t ASP_control(void) {
       return 1;
 
     case USBASP_FUNC_TPI_CONNECT:
-      TPI_dly_cnt = *(uint16_t*) &EP0_buffer[2];
+      TPI_dly_cnt = EP0_buffer[2]; //*(uint16_t*) &EP0_buffer[2];
       TPI_connect();
       return 0;
 

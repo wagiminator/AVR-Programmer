@@ -55,7 +55,7 @@
 #define NVMCMD_WORD_WRITE       0x1D
 
 // Globals
-extern __xdata uint16_t TPI_dly_cnt;    // number of iterations in tpi_delay loop
+extern __xdata uint8_t TPI_dly_cnt;     // number of iterations in tpi_delay loop
 
 // Functions
 void TPI_connect(void);                 // connect TPI bus

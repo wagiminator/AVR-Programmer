@@ -1,15 +1,12 @@
 // ===================================================================================
 // Project:   picoASP AVR ISP Programmer based on CH551, CH552, CH554
-// Version:   v0.4
+// Version:   v1.0
 // Year:      2023
 // Author:    Stefan Wagner
 // Github:    https://github.com/wagiminator
 // EasyEDA:   https://easyeda.com/wagiminator
 // License:   http://creativecommons.org/licenses/by-sa/3.0/
 // ===================================================================================
-//
-// !!! This firmware version is experimental and still in development !!!
-// ToDo: make TPI work
 //
 // Description:
 // ------------

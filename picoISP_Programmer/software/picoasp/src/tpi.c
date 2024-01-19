@@ -1,20 +1,20 @@
 // ===================================================================================
-// TPI Functions for for CH551, CH552 and CH554
+// TPI Functions for for CH551, CH552 and CH554                               * v1.1 *
 // ===================================================================================
 
 #include "tpi.h"
 
-__xdata uint16_t TPI_dly_cnt; 
+__xdata uint8_t TPI_dly_cnt; 
 
 // Transmit/receive one bit via TPI; b must be 1 when receiving
 __bit TPI_clockBit(__bit b) {
   __bit result;
-  uint16_t cnt;
+  uint8_t cnt;
   PIN_write(PIN_MOSI, b);                 // set DATA according to bit
   cnt = TPI_dly_cnt; while(cnt--);        // delay
   PIN_high(PIN_SCK);                      // CLK high
-  result = PIN_read(PIN_MOSI);            // read DATA
   cnt = TPI_dly_cnt; while(cnt--);        // delay
+  result = PIN_read(PIN_MOSI);            // read DATA
   PIN_low(PIN_SCK);                       // CLK low
   return result;
 }
@@ -29,15 +29,15 @@ void TPI_connect(void) {
 
   PIN_high(PIN_RESET);                    // RST high
   PIN_output(PIN_RESET);                  // RST to output
-  DLY_us(1000);                           // wait a bit (128ms ???)
+  DLY_us(1000);                           // wait a bit
   PIN_low(PIN_RESET);                     // RST low
+  DLY_us(5600);                           // wait a bit
   PIN_high(PIN_MOSI);                     // DATA high
   PIN_input_PU(PIN_MOSI);                 // DATA input pullup, open-drain output
-  DLY_us(5600);                           // wait a bit (2000ns ???)
   PIN_low(PIN_SCK);                       // CLK low
   PIN_output(PIN_SCK);                    // CLK to output
   
-  for(i=32; i; i--) TPI_clockBit(1);      // DATA high for 32 TPI clock cycles (16 ???)
+  for(i=32; i; i--) TPI_clockBit(1);      // DATA high for 32 TPI clock cycles
 }
 
 // Disconnect TPI bus
@@ -45,12 +45,12 @@ void TPI_disconnect(void) {
   TPI_writeByte(TPI_OP_SSTCS(TPISR));
   TPI_writeByte(0);
   DLY_us(3200);
-  PIN_input(PIN_SCK);                     // CLK to input, high-impedance
-  PIN_input(PIN_MOSI);                    // DATA to input, high-impedance
   PIN_high(PIN_RESET);                    // RST high
   DLY_us(1600);                           // wait a bit
   PIN_low(PIN_RESET);                     // RST low
   DLY_us(1600);                           // wait a bit
+  PIN_input(PIN_SCK);                     // CLK to input, high-impedance
+  PIN_input(PIN_MOSI);                    // DATA to input, high-impedance
   PIN_input(PIN_RESET);                   // RST to input
   
   #ifdef PIN_LED_PRG
@@ -97,7 +97,7 @@ uint8_t TPI_readByte(void) {
   // Read data bits
   for(i=8; i; i--) {                      // 8 bits
     result >>= 1;                         // LSB first
-    if(TPI_clockBit(1)) result &= 0x80;   // get data bit
+    if(TPI_clockBit(1)) result |= 0x80;   // get data bit
   }
   
   // Receive and check parity
