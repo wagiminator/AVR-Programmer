@@ -57,14 +57,3 @@ void DLY_us(uint16_t n) {           // delay in us
     --n;
   }
 }
-
-// ===================================================================================
-// Delay in Units of ms
-// ===================================================================================
-void DLY_ms(uint16_t n) {           // delay in ms
-  while(n) {
-    while(!(TKEY_CTRL & bTKC_IF));
-		while(TKEY_CTRL & bTKC_IF);
-		--n;
-  }
-}

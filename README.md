@@ -20,8 +20,8 @@ The CH55x-based picoISP is a simple and cheap USB-based in-system programmer (IS
 
 ![picoISP_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/picoISP_Programmer/documentation/picoISP_pic1.jpg)
 
-## [picoAVR ISP + UPDI Programmer - CH552G](https://github.com/wagiminator/AVR-Programmer/tree/master/picoAVR_Programmer)
-The CH55x-based picoAVR is an ISP and UPDI combo programmer for AVR microcontrollers compatible with the USBtinyISP and SerialUPDI. It works fine with the Arduino IDE (Tools -> Programmer -> USBtinyISP / Tools -> Programmer -> SerialUPDI). This combo programmer includes a target voltage selection switch that allows users to choose between 5V and 3.3V for their project needs.
+## [picoAVR ISP + TPI + UPDI Programmer - CH552G](https://github.com/wagiminator/AVR-Programmer/tree/master/picoAVR_Programmer)
+The CH55x-based picoAVR is an ISP, TPI, and UPDI combo programmer for AVR microcontrollers compatible with the USBasp and SerialUPDI. It works fine with the Arduino IDE (Tools -> Programmer -> USBasp / Tools -> Programmer -> SerialUPDI). This combo programmer includes a target voltage selection switch that allows users to choose between 5V and 3.3V for their project needs.
 
 ![picoAVR_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/picoAVR_Programmer/documentation/picoAVR_pic1.jpg)
 

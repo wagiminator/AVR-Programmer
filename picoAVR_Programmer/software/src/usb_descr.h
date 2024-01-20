@@ -14,31 +14,27 @@
 #pragma once
 #include <stdint.h>
 #include "usb.h"
+#include "config.h"
 
 // ===================================================================================
 // USB Endpoint Definitions
 // ===================================================================================
 #define EP0_SIZE        8
 #define EP1_SIZE        8
-#define EP2_SIZE        8
-#define EP3_SIZE        64
-
-#define EP0_ADDR        0
-#define EP1_ADDR        (EP0_ADDR + EP0_BUF_SIZE)
-#define EP2_ADDR        (EP1_ADDR + EP1_BUF_SIZE)
-#define EP3_ADDR        (EP2_ADDR + EP2_BUF_SIZE)
+#define EP2_SIZE        64
+#define EP3_SIZE        8
 
 #define EP0_BUF_SIZE    EP_BUF_SIZE(EP0_SIZE)
 #define EP1_BUF_SIZE    EP_BUF_SIZE(EP1_SIZE)
-#define EP2_BUF_SIZE    EP_BUF_SIZE(EP2_SIZE)
-#define EP3_BUF_SIZE    EP_BUF_SIZE(EP3_SIZE) + 64
+#define EP2_BUF_SIZE    EP_BUF_SIZE(EP2_SIZE) + 64
+#define EP3_BUF_SIZE    EP_BUF_SIZE(EP3_SIZE)
 
 #define EP_BUF_SIZE(x)  (x+2<64 ? x+2 : 64)
 
-__xdata __at (EP0_ADDR) uint8_t EP0_buffer[EP0_BUF_SIZE];     
-__xdata __at (EP1_ADDR) uint8_t EP1_buffer[EP1_BUF_SIZE];
-__xdata __at (EP2_ADDR) uint8_t EP2_buffer[EP2_BUF_SIZE];
-__xdata __at (EP3_ADDR) uint8_t EP3_buffer[EP3_BUF_SIZE];
+extern __xdata uint8_t EP0_buffer[];
+extern __xdata uint8_t EP1_buffer[];
+extern __xdata uint8_t EP2_buffer[];
+#define EP3_buffer EP1_buffer
 
 // ===================================================================================
 // Device and Configuration Descriptors
@@ -46,14 +42,14 @@ __xdata __at (EP3_ADDR) uint8_t EP3_buffer[EP3_BUF_SIZE];
 typedef struct _USB_CFG_DESCR_ISP {
   USB_CFG_DESCR config;
   USB_ITF_DESCR interface0;
-  USB_ENDP_DESCR ep1IN;
+  USB_ENDP_DESCR ep3IN;
   USB_IAD_DESCR association;
   USB_ITF_DESCR interface1;
   uint8_t functional[19];
-  USB_ENDP_DESCR ep2IN;
+  USB_ENDP_DESCR ep1IN;
   USB_ITF_DESCR interface2;
-  USB_ENDP_DESCR ep3OUT;
-  USB_ENDP_DESCR ep3IN;
+  USB_ENDP_DESCR ep2OUT;
+  USB_ENDP_DESCR ep2IN;
 } USB_CFG_DESCR_ISP, *PUSB_CFG_DESCR_ISP;
 typedef USB_CFG_DESCR_ISP __xdata *PXUSB_CFG_DESCR_ISP;
 
@@ -77,3 +73,12 @@ extern __code uint16_t InterfDescr1[];
 #define USB_STR_DESCR_i4    (uint8_t*)InterfDescr0
 #define USB_STR_DESCR_i5    (uint8_t*)InterfDescr1
 #define USB_STR_DESCR_ix    (uint8_t*)SerDescr
+
+// ===================================================================================
+// Windows Compatible ID (WCID) descriptors for automated driver installation
+// ===================================================================================
+#ifdef WCID_VENDOR_CODE
+extern __code uint8_t WCID_FEATURE_DESCR[];
+extern __code uint16_t MicrosoftDescr[];
+#define USB_STR_DESCR_ixee  (uint8_t*)MicrosoftDescr
+#endif

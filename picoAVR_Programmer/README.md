@@ -1,5 +1,5 @@
-# picoAVR ISP and UPDI Combo Programmer for AVR MCU based on CH552G
-The CH55x-based picoAVR is an ISP and UPDI combo programmer for AVR microcontrollers compatible with the USBtinyISP and SerialUPDI. It works fine with the Arduino IDE (Tools -> Programmer -> USBtinyISP / Tools -> Programmer -> SerialUPDI). This combo programmer includes a target voltage selection switch that allows users to choose between 5V and 3.3V for their project needs. The USBtinyISP part of the firmware is based on Dick Streefland's and Ladyada's original implementation and DeqingSun's CH55x conversion.
+# picoAVR - ISP / TPI / UPDI Combo Programmer for AVR MCU based on CH552G
+The CH55x-based picoAVR is an ISP, TPI, and UPDI combo programmer for AVR microcontrollers compatible with the USBasp and SerialUPDI. It works fine with the Arduino IDE (Tools -> Programmer -> USBasp / Tools -> Programmer -> SerialUPDI). This combo programmer includes a target voltage selection switch that allows users to choose between 5V and 3.3V for their project needs.
 
 ![picoAVR_pic1.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/picoAVR_Programmer/documentation/picoAVR_pic1.jpg)
 
@@ -49,32 +49,33 @@ sudo pip install pyusb
 Install the [Arduino IDE](https://www.arduino.cc/en/software) if you haven't already. Install the [CH55xduino](https://github.com/DeqingSun/ch55xduino) package by following the instructions on the website.
 
 ### Compiling and Uploading Firmware
+- Adjust the firmware parameters in src/config.h if necessary.
 - Copy the .ino and .c files as well as the /src folder together into one folder and name it picoavr. 
 - Open the .ino file in the Arduino IDE.
 - Go to **Tools -> Board -> CH55x Boards** and select **CH552 Board**.
 - Go to **Tools** and choose the following board options:
   - **Clock Source:**   16 MHz (internal)
   - **Upload Method:**  USB
-  - **USB Settings:**   USER CODE /w 266B USB RAM
+  - **USB Settings:**   USER CODE /w 0B USB RAM
 - Connect the board and make sure the CH55x is in bootloader mode. 
 - Click **Upload**.
 
 ## Installing Drivers for the picoAVR
-On Linux, you don't need to install a driver. Windows users may need to install the [usbtiny driver](https://learn.adafruit.com/usbtinyisp). For Windows 10/11, you can also use the [Zadig Tool](https://zadig.akeo.ie/) to install the correct driver. Click on "Options" -> "List all devices" and select the USBtiny. Then install the libusb-win32 driver. To do this, the picoAVR must be connected to your PC. You can also use the Zadig Tool to install the CDC driver for the CDC Serial Interface.
+On Linux, you don't need to install a driver. The implementation includes Windows Compatible ID (WCID) code for automated driver installation on Windows. If this doesn't work, Windows users may need to install a driver manually using the Zadig tool (https://zadig.akeo.ie/). Click on "Options" -> "List all devices" and select the USBasp. Then install the libusb-win32 driver. Now select the SerialUPDI and install the CDC driver. To do this, the picoAVR must be connected to your PC.
 
 # Operating Instructions
 - Select the programming voltage (3.3V or 5V) with the voltage selection switch.
-- Plug the picoAVR into a USB port on your PC, it should be identified as a USBtinyISP with an additional CDC serial interface.
+- Plug the picoAVR into a USB port on your PC, it should be identified as a USBasp with an additional CDC COM port.
 - Connect the picoAVR to the target board via the 6-pin ICSP connector or the 3-pin UPDI connector.  
-- The picoAVR should work with any IDE or programming software that supports the USBtinyISP and/or SerialUPDI programmer.
+- The picoAVR should work with any IDE or programming software that supports the USBasp and/or SerialUPDI programmer.
 
 # References, Links and Notes
 1. [EasyEDA Design Files](https://oshwlab.com/wagiminator)
 2. [WCH: CH552 Datasheet](http://www.wch-ic.com/downloads/CH552DS1_PDF.html)
 3. [SDCC Compiler](https://sdcc.sourceforge.net/)
 4. [Blinkinlabs: CH55x SDK for SDCC](https://github.com/Blinkinlabs/ch554_sdcc)
-5. [Dick Streefland: USBtiny](https://dicks.home.xs4all.nl/avr/usbtiny/)
-6. [Ladyada: USBtinyISP](https://learn.adafruit.com/usbtinyisp)
+5. [Thomas Fischl: USBasp](https://www.fischl.de/usbasp/)
+6. [Ralph Doncaster: USBasp](https://github.com/nerdralph/usbasp)
 7. [Deqing Sun: CH55xduino](https://github.com/DeqingSun/ch55xduino)
 
 ![picoAVR_pic4.jpg](https://raw.githubusercontent.com/wagiminator/AVR-Programmer/master/picoAVR_Programmer/documentation/picoAVR_pic4.jpg)

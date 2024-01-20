@@ -15,6 +15,9 @@
 #define UPDI_ready()      (UPDI_readyFlag)    // ready to send data?
 #define UPDI_available()  (UPDI_readPointer != UPDI_writePointer) // something in buffer?
 
+#define UPDI_BAUD         115200
+#define UPDI_BAUD_SET     (uint8_t)(256 - (((F_CPU / 8 / UPDI_BAUD) + 1) / 2))
+
 // Variables
 extern __xdata uint8_t  UPDI_buffer[];
 extern volatile uint8_t UPDI_readPointer;
@@ -30,7 +33,7 @@ inline void UPDI_init(void) {
   PCON  |= SMOD;                  // UART0 fast BAUD rate
   TMOD  |= bT1_M1;                // TIMER1 8-bit auto-reload
   T2MOD |= bTMR_CLK | bT1_CLK;    // TIMER1 fast clock selection
-//TH1    = UART_BAUD_SET;         // TIMER1 configure for BAUD rate
+  TH1    = UPDI_BAUD_SET;         // TIMER1 configure for BAUD rate
   TR1    = 1;                     // TIMER1 start
   REN    = 1;                     // enable RX
 //TI     = 1;                     // UART0 set transmit complete flag
@@ -40,13 +43,22 @@ inline void UPDI_init(void) {
 
 // Transmit a data byte
 inline uint8_t UPDI_write(uint8_t data) {
-  REN  = 0;                       // disable RX to avoid echo (set again in ISR)
-  ACC  = data;                    // load data byte into accu to check parity
-  TB8  = P;                       // set parity bit as 9th bit for UART
-  SBUF = data;                    // start transmitting data byte + parity
-  UPDI_readyFlag = 0;             // clear ready flag
   while(!UPDI_readyFlag);         // wait for transmission to complete
-  DLY_us(48);                     // second stop bit + inter-byte delay
+  DLY_us(12);                     // second stop bit + inter-byte delay
+  REN  = 0;                       // disable RX to avoid echo (set again in ISR)
+  if(TH1 == 0) {                  // slow speed? -> must be UPDI BREAK
+    PIN_low(PIN_TXD);
+    DLY_us(25000);                // hold UPDI low for 25ms -> BREAK
+    PIN_high(PIN_TXD);
+    REN = 1;                      // enable RX again
+    DLY_us(2000);
+  }
+  else {                          // normal data byte?
+    ACC  = data;                  // load data byte into accu to check parity
+    TB8  = P;                     // set parity bit as 9th bit for UART
+    SBUF = data;                  // start transmitting data byte + parity
+    UPDI_readyFlag = 0;           // clear ready flag
+  }
 }
 
 // Receive a data byte
@@ -56,21 +68,15 @@ inline uint8_t UPDI_read(void) {
   return result;                  // return byte
 }
 
-// Send a BREAK frame
-inline void UPDI_break(void) {
-  REN = 0;                        // disable RX to avoid echo
-  PIN_low(PIN_TXD);
-  DLY_ms(25);                     // hold UPDI low for 25ms -> BREAK
-  PIN_high(PIN_TXD);
-  REN = 1;                        // enable RX again
-  DLY_us(48);
-}
-
 // Set BAUD rate (currently limited to max 230400 BAUD)
 inline void UPDI_setBAUD(uint32_t baud) {
+  if(baud <= F_CPU / 16 / 256) TH1 = 0;
+  else TH1 = UPDI_BAUD_SET;
+/*
   if      (baud >= 230400)            TH1 = (uint8_t)(256 - ((F_CPU / 8 / 230400) + 1) / 2);
   else if (baud <= F_CPU / 16 / 256)  TH1 = 0;
   else                                TH1 = (uint8_t)(256 - ((F_CPU / 8 / baud) + 1) / 2);
+*/
 }
 
 void UART_interrupt(void);
