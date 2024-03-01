@@ -260,9 +260,11 @@ uint8_t write_flash(uint16_t length) {
 }
 
 uint8_t write_eeprom(uint16_t length) {
-  uint16_t x;
-  for(x = 0; x < length; x++) {
-    spi_transaction(0xC0, 0x00, (_addr << 1) + x, buff[x]);
+  uint16_t x = 0;
+  _addr <<= 1;
+  while(x < length) {
+    spi_transaction(0xC0, _addr >> 8, _addr, buff[x++]);
+    _addr++;
     DLY_us(9600);
   } 
   return STK_OK;
@@ -310,9 +312,10 @@ uint8_t flash_read_page(uint16_t length) {
 }
 
 uint8_t eeprom_read_page(uint16_t length) {
-  uint16_t x;
-  for(x = 0; x < length; x++) {
-    CDC_write(spi_transaction(0xA0, 0x00, (_addr << 1) + x, 0xFF));
+  _addr <<= 1;
+  while(length--) {
+    CDC_write(spi_transaction(0xA0, _addr >> 8, _addr, 0xFF));
+    _addr++;
   }
   return STK_OK;
 }
